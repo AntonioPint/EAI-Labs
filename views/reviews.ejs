@@ -1,0 +1,35 @@
+<!-- socialNetwork.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        .message-card {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .message-card h3 {
+            margin-top: 0;
+        }
+        .message-card p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1><%= title %></h1>
+    <% reviews.forEach(function(review) { %>
+        <% if (review) { %>
+            <div class="message-card">
+                <p><%= review %></p>
+            </div>
+        <% } %>
+    <% }) %>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/index.css" />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    <form id="reviewForm" method="get" action="review">
+      <label for="reviewInputValue">GET /review/:id</label>
+      <input
+        type="text"
+        id="reviewInputValue"
+        placeholder="Enter value"
+      />
+      <input type="submit" value="Submit" />
+    </form>
+
+    <form id="positiveReviewsForm" method="get" action="positiveReviews">
+      <label for="positiveReviewInputValue">GET /positiveReviews/:limit</label>
+      <input
+        type="text"
+        id="positiveReviewInputValue"
+        placeholder="Enter value"
+      />
+      <input type="submit" value="Submit" />
+    </form>
+
+    <form id="negativeReviewsForm" method="get" action="negativeReviews">
+      <label for="negativeReviewInputValue">GET /negativeReviews/:limit</label>
+      <input
+        type="text"
+        id="negativeReviewInputValue"
+        placeholder="Enter value"
+      />
+      <input type="submit" value="Submit" />
+    </form>
+
+    <script src="/javascripts/index.js"></script>
+  </body>
+</html>
