@@ -1,7 +1,7 @@
 const HotelReview = require("../dto/hotelReview.js")
 const connection = require("../config.js");
 
-connection.connect();
+
 
 function getPositiveReviews(x=1000) {
     return new Promise((resolve, reject) => {

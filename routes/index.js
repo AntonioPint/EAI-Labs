@@ -48,4 +48,29 @@ router.get("/review/:id", async function (req, res, next) {
   res.render("listReviews", { reviews: [review] });
 });
 
+
+// 
+var getTrainingSet = require("../classification/train.js")
+var stpw = require("../classification/stopwords.js")
+var stemmr = require("../classification/stemming.js")
+var ngram = require("../classification/tokenization.js");
+const preprocessing = require("../classification/preprocessing.js");
+// 
+
+router.get("/test", async function (req, res, next) {
+  let a = "The  quick brown  fox jumps over  the lazy dog. Meanwhile,  the cat is sleeping  peacefully under  the tree."
+
+  res.send(preprocessing(a, [1,2,3], ["brown", "dog"]))
+});
+
+// router.get("/test", async function (req, res, next) {
+//   try {
+//     const trainingSet = await getTrainingSet(0);
+//     res.send(trainingSet);
+//   } catch (error) {
+//     console.error("Error fetching training set:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
+
 module.exports = router;
