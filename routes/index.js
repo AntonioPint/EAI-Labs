@@ -50,7 +50,7 @@ router.get("/review/:id", async function (req, res, next) {
 
 
 // 
-var getTrainingSet = require("../classification/train.js")
+var train = require("../classification/train.js")
 var stpw = require("../classification/stopwords.js")
 var stemmr = require("../classification/stemming.js")
 var ngram = require("../classification/tokenization.js");
@@ -65,7 +65,7 @@ router.get("/test", async function (req, res, next) {
 
 // router.get("/test", async function (req, res, next) {
 //   try {
-//     const trainingSet = await getTrainingSet(0);
+//     const trainingSet = await train.getTrainingSet(0);
 //     res.send(trainingSet);
 //   } catch (error) {
 //     console.error("Error fetching training set:", error);

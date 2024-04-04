@@ -19,7 +19,7 @@ function getPositiveReviews(x=1000) {
 
 function getNegativeReviews(x=1000) {
     return new Promise((resolve, reject) => {
-        connection.query("SELECT Negative_Review FROM hotel_review WHERE Reviewer_Score < 2 order by Reviewer_Score asc limit ? ;", [x] , function (err, rows, fields) {
+        connection.query("SELECT Negative_Review FROM hotel_review WHERE Reviewer_Score < 3 order by Reviewer_Score asc limit ? ;", [x] , function (err, rows, fields) {
             if (err) {
                 reject(err); 
                 connection.destroy()

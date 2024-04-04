@@ -2,7 +2,7 @@ const HotelReview = require("../database/dto/hotelReview.js")
 const connection = require("../database/config.js");
 
 
-module.exports = (my_class) => {
+function getTrainingSet(my_class){
     if (isNaN(my_class) || (my_class != 0 && my_class != 1)){
         throw "parameter should be either 0 or 1"
     }
@@ -19,4 +19,8 @@ module.exports = (my_class) => {
             resolve(rows); 
         });
     });
+}
+
+module.exports = {
+    getTrainingSet: getTrainingSet
 }
