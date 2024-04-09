@@ -1,5 +1,4 @@
 
-
 function toLowerCase(inputText){
     return inputText.toLowerCase()
 }
