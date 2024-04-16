@@ -1,68 +1,542 @@
 [
     {
-        "originalText": "This dog wants to play. This person wants to play",
-        "cleanedText": "this dog wants to play this person wants to play",
-        "preprocessedText": "dog want plai person want plai",
-        "tokens": [
-            [
-                [
-                    "dog"
-                ],
-                [
-                    "want"
-                ],
-                [
-                    "plai"
-                ],
-                [
-                    "person"
-                ],
-                [
-                    "want"
-                ],
-                [
-                    "plai"
-                ]
-            ],
-            [
-                [
-                    "dog",
-                    "want"
-                ],
-                [
-                    "want",
-                    "plai"
-                ],
-                [
-                    "plai",
-                    "person"
-                ],
-                [
-                    "person",
-                    "want"
-                ],
-                [
-                    "want",
-                    "plai"
-                ]
-            ]
-        ],
-        "tf": [
-            [
-                0.16666666666666666,
-                0.3333333333333333,
-                0.3333333333333333,
-                0.16666666666666666,
-                0.3333333333333333,
-                0.3333333333333333
-            ],
-            [
-                0.2,
-                0.4,
-                0.2,
-                0.2,
-                0.4
-            ]
-        ]
+        "name": "excel",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.125,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.03762874945799765,
+        "docId": 0
+    },
+    {
+        "name": "excel",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 1
+    },
+    {
+        "name": "locat",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.125,
+        "idf": 0,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "locat",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0,
+        "tfidf": 0,
+        "docId": 1
+    },
+    {
+        "name": "friendli",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.125,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.03762874945799765,
+        "docId": 0
+    },
+    {
+        "name": "friendli",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 1
+    },
+    {
+        "name": "staff",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.125,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.03762874945799765,
+        "docId": 0
+    },
+    {
+        "name": "staff",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 1
+    },
+    {
+        "name": "big",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.125,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.03762874945799765,
+        "docId": 0
+    },
+    {
+        "name": "big",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 1
+    },
+    {
+        "name": "room",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.125,
+        "idf": 0,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "room",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0,
+        "tfidf": 0,
+        "docId": 1
+    },
+    {
+        "name": "good",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.125,
+        "idf": 0,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "good",
+        "binary": 1,
+        "occurrences": 2,
+        "tf": 0.06896551724137931,
+        "idf": 0,
+        "tfidf": 0,
+        "docId": 1
+    },
+    {
+        "name": "breakfast",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.125,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.03762874945799765,
+        "docId": 0
+    },
+    {
+        "name": "breakfast",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 1
+    },
+    {
+        "name": "great",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "great",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "easi",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "easi",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "access",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "access",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "queenswai",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "queenswai",
+        "binary": 1,
+        "occurrences": 2,
+        "tf": 0.06896551724137931,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.020760689356136633,
+        "docId": 1
+    },
+    {
+        "name": "bayswat",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "bayswat",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "tube",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "tube",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "station",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "station",
+        "binary": 1,
+        "occurrences": 2,
+        "tf": 0.06896551724137931,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.020760689356136633,
+        "docId": 1
+    },
+    {
+        "name": "minut",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "minut",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "walk",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "walk",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "paddington",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "paddington",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "airport",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "airport",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "express",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "express",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "eateri",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "eateri",
+        "binary": 1,
+        "occurrences": 2,
+        "tf": 0.06896551724137931,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.020760689356136633,
+        "docId": 1
+    },
+    {
+        "name": "westbourn",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "westbourn",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "grove",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "grove",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "chines",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "chines",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "edwardian",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "edwardian",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "dark",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "dark",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "oak",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "oak",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "panel",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "panel",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "public",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "public",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
+    },
+    {
+        "name": "impress",
+        "binary": 0,
+        "occurrences": 0,
+        "tf": 0,
+        "idf": 0.3010299956639812,
+        "tfidf": 0,
+        "docId": 0
+    },
+    {
+        "name": "impress",
+        "binary": 1,
+        "occurrences": 1,
+        "tf": 0.034482758620689655,
+        "idf": 0.3010299956639812,
+        "tfidf": 0.010380344678068316,
+        "docId": 1
     }
 ]

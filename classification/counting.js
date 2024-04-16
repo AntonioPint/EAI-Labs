@@ -4,57 +4,38 @@ function countByNgrams(text, n) {
     return tokenization(text, n).length
 }
 
-function countBySize(tokens) {
-    return tokens.length
+function countBySize(document) {
+    return document.length
 }
 
-function numberOfOccurrences(tokens, token) {
-    let count = 0;
-    for (let i = 0; i < tokens.length; i++) {
-        if (tokens[i].length === token.length) {
-            let match = true;
-            for (let j = 0; j < tokens[i].length; j++) {
-                if (tokens[i][j] !== token[j]) {
-                    match = false;
-                    break;
-                }
-            }
-            if (match) {
-                count++;
-            }
-        }
-    }
-    return count;
+function numberOfOccurrences(word, document) {
+    return document.reduce((count, documentWord) => {
+        return count + (word === documentWord ? 1 : 0);
+    }, 0);
 }
 
-
-function exists(tokens, token){
-    return numberOfOccurrences(tokens, token) > 0;
+function exists(document, word) {
+    return numberOfOccurrences(word, document) > 0;
 }
 
-function tf(tokens, token){
-    console.log("//")
-    console.log(numberOfOccurrences(tokens, token))
-    console.log(countBySize(tokens))
-    console.log(tokens)
-    console.log(token)
-    console.log("//")
-    return numberOfOccurrences(tokens, token) / countBySize(tokens)
+function tf(document, word) {
+    return numberOfOccurrences(word, document) / countBySize(document)
 }
 
-function idf(N, d){
-    return Math.log10(N/d)
+function idf(N, d) {
+    return Math.log10(N / d)
 }
 
-function tfidf(tf, idf){
+function tfidf(tf, idf) {
     return tf * idf
 }
 
 module.exports = {
+    numberOfOccurrences: numberOfOccurrences,
     countByNgrams: countByNgrams,
     countBySize: countBySize,
     exists: exists,
-    tf: tf,
+    tfidf: tfidf,
     idf: idf,
-    tfidf: tfidf
+    tf: tf,
 }
