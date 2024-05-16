@@ -2,4 +2,3 @@
 *.csv
 node_modules/
 Dump*.sql
-*.pdf

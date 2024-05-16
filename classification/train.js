@@ -4,28 +4,29 @@ const preprocessing = require("./preprocessing.js")
 const counting = require("./counting.js")
 const bgOfWrds = require("./bagOfWords.js")
 const fs = require('node:fs');
-const Term = require("../classes/Term.js")
+const Term = require("../database/dto/Term.js")
+const featureSelection = require("./featureSelection.js");
+const termStatisticRepository = require("../database/repositories/termStatisticRepository.js")
+const termRepository = require("../database/repositories/termRepository.js");
+const { getTrainingSet } = require("../database/repositories/trainAndTestingSets.js");
 
-async function process() {
+async function processTerms() {
     let training_set = await getTrainingSet();
 
     training_set.sort((a, b) => { return b.class - a.class })
 
     let preprocessedTraining = training_set.map(element => {
         let preProcessed = preprocessing(element.review_text, [1, 2])
-        return { class: element.class, ...preProcessed }
+        return { class: element.class, ...preProcessed, docId: element.id}
     });
 
-    // let preprocessedTraining = [
-    //     { class: 1, ...preprocessing("This dog wants to play. This person wants to play", [1, 2]) },
-    //     { class: 1, ...preprocessing("The computer runs fast. The person runs fast", [1, 2]) }
-    // ]
     let unigramPositives = []
     let unigramNegatives = []
     let bigramPositives = []
     let bigramNegatives = []
 
-    // TK
+    const startTime = performance.now();
+
     preprocessedTraining.forEach(element => {
         let result = []
         element.tokens.forEach(tokensNgram => {
@@ -37,10 +38,17 @@ async function process() {
         })
         element.tf = result
     });
+    preprocessedTraining = preprocessedTraining.slice(750, 850)
 
-    preprocessedTraining = preprocessedTraining.slice(0,2)
-    // console.log(preprocessedTraining)
-    // positives e negatives
+    //Essencial para conter apenas tokens quando arrayLength > 0
+    preprocessedTraining = preprocessedTraining.filter(e => {
+        return (e.tokens[0].length > 0 && e.tokens[1].length > 0)
+    })
+
+    const originalDuration = performance.now() - startTime;
+    console.log("Original version duration:", originalDuration, "milliseconds");
+
+    // positives and negatives
     preprocessedTraining.forEach(element => {
         let unigram = element.tokens[0]
         let bigram = element.tokens[1]
@@ -53,8 +61,8 @@ async function process() {
             bigramPositives = bgOfWrds.addUniqueTerms(bigramPositives, bigram)
         }
     })
-
-    let documents = preprocessedTraining.map((e)=> e.tokens[0])
+    let documentsUnigram = preprocessedTraining.map((e) => e.tokens[0])
+    let documentsBigram = preprocessedTraining.map((e) => e.tokens[1])
 
     // const bagOfWords = ["room", "small", "messy", "breakfast", "very", "good", "few", "choices"];
     // const documents = [
@@ -62,13 +70,32 @@ async function process() {
     //     ["breakfast", "very", "good"],
     //     ["breakfast", "very", "few", "choices"],
     // ];
-    // const terms = documents[1] 
-    console.log(documents)
-    console.log(unigramPositives)
-    let results = Term.createTermData(unigramPositives, documents)
 
-    const content = JSON.stringify(results);
-    fs.writeFile('./classification/preprocessing_tf.json', content, err => {
+    console.log("GENERATING TERM"); await termRepository.truncateTable()
+
+    // Define an array to store arrays of term data
+    const termDataPromises = [];
+
+    // Push arrays of term data for unigram positives, unigram negatives, bigram positives, and bigram negatives
+    termDataPromises.push(Term.createTermData(unigramPositives, documentsUnigram, 1));
+    termDataPromises.push(Term.createTermData(unigramNegatives, documentsUnigram, 0));
+
+    termDataPromises.push(Term.createTermData(bigramPositives, documentsBigram, 1));
+    termDataPromises.push(Term.createTermData(bigramNegatives, documentsBigram, 0));
+
+    // Wait for all promises to resolve
+    const resolvedResults = await Promise.all(termDataPromises.map(async (promise) => await promise));
+    console.log("INSERTING  TERMS");
+    for (const results of resolvedResults) {
+        for (const e of results) {
+            await termRepository.insertTerm(e);
+        }
+    }
+    console.log("FINISHED GENERATING TERM");
+
+
+    const content = JSON.stringify(resolvedResults);
+    fs.writeFile('./classification/preprocessing_tf2.json', content, err => {
         if (err) {
             console.error(err);
         } else {
@@ -76,64 +103,31 @@ async function process() {
             console.log("Done Writting")
         }
     });
-
 }
 
-function getTrainingSet() {
-    return new Promise((resolve, reject) => {
-        connection.query(`SELECT 
-                            CASE 
-                                WHEN tas.class = 0 THEN hr.Negative_Review 
-                                WHEN tas.class = 1 THEN hr.Positive_Review 
-                            END AS review_text,
-                            tas.class,
-                            hr.id
-                        FROM 
-                            hotel_review hr 
-                        INNER JOIN 
-                            training_set tas 
-                        ON 
-                            hr.id = tas.review_id;
-    `, function (err, rows, fields) {
-            if (err) {
-                reject(err);
-                // connection.destroy()
-                return;
-            }
-            resolve(rows);
-        });
-    });
+
+async function processTermStatistics() {
+    let resolvedResults = await termRepository.getAllTerms()
+
+    if (resolvedResults == null || resolvedResults.length <= 0) {
+        return
+    }
+
+    console.log("GENERATING TERM STATISTIC"); await termStatisticRepository.truncateTable()
+
+    let Kbest = featureSelection.selectKBest(resolvedResults, "tfIdf", true)
+
+    console.log("INSERTING  TERMS STATISTICS");
+    for (const results of Kbest) {
+        await termStatisticRepository.insertTermStatistic(results)
+
+    }
+    console.log("FINISHED GENERATING TERM STATISTIC");
 }
 
-function getTestingSet() {
-    return new Promise((resolve, reject) => {
-        connection.query(`SELECT 
-                            CASE 
-                                WHEN tes.class = 0 THEN hr.Negative_Review 
-                                WHEN tes.class = 1 THEN hr.Positive_Review 
-                            END AS review_text,
-                            tes.class,
-                            hr.id
-                        FROM 
-                            hotel_review hr 
-                        INNER JOIN 
-                            testing_set tes 
-                        ON 
-                            hr.id = tes.review_id;
-    `, function (err, rows, fields) {
-            if (err) {
-                reject(err);
-                // connection.destroy()
-                return;
-            }
-            resolve(rows);
-        });
-    });
-}
 
 module.exports = {
-    getTrainingSet: getTrainingSet
+    getTrainingSet: getTrainingSet,
+    processTerms: processTerms,
+    processTermStatistics: processTermStatistics
 }
-
-
-process()
