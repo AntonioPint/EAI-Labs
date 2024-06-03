@@ -9,8 +9,8 @@ const featureSelection = require("./featureSelection.js");
 const termStatisticRepository = require("../database/repositories/termStatisticRepository.js")
 const termRepository = require("../database/repositories/termRepository.js");
 const { getTrainingSet } = require("../database/repositories/trainAndTestingSets.js");
+const classifier = require("./classifier.js")
 
-const csv = require('csv-parser');
 
 async function processTerms() {
     let training_set = await getTrainingSet();
@@ -22,17 +22,9 @@ async function processTerms() {
         return { class: element.class, ...preProcessed, docId: element.id }
     });
 
-    preprocessedTraining.forEach(element => {
-        let result = []
-        element.tokens.forEach(tokensNgram => {
-            let tokensResult = []
-            tokensNgram.forEach(token => {
-                tokensResult.push(counting.tf(tokensNgram, token))
-            })
-            result.push(tokensResult)
-        })
-        element.tf = result
-    });
+    preProcessed.tf = preProcessed.tokens.map(tokensNgram => 
+        tokensNgram.map(token => counting.tf(tokensNgram, token))
+    );
     preprocessedTraining = preprocessedTraining.slice(775, 825)
 
     //Essencial para conter apenas tokens quando arrayLength > 0

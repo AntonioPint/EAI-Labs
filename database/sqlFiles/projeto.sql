@@ -1,4 +1,6 @@
-CREATE TABLE food_reviews (
+use lojacarl_EAI_HotelReviews_Lab;
+/*
+CREATE TABLE food_review (
     Id INT PRIMARY KEY,
     ProductId VARCHAR(255),
     UserId VARCHAR(255),
@@ -11,7 +13,7 @@ CREATE TABLE food_reviews (
     Text TEXT
 );
 
-select count(*) from lojacarl_EAI_HotelReviews_Lab.food_reviews;
+select count(*) from lojacarl_EAI_HotelReviews_Lab.food_review;
 
 SELECT 
     COUNT(*) AS TotalRows,
@@ -25,10 +27,122 @@ SELECT
     COUNT(*) - COUNT(Time) AS Time_NULL_Count,
     COUNT(*) - COUNT(Summary) AS Summary_NULL_Count,
     COUNT(*) - COUNT(Text) AS Text_NULL_Count
-FROM lojacarl_EAI_HotelReviews_Lab.food_reviews;
+FROM lojacarl_EAI_HotelReviews_Lab.food_review;
 
-ALTER TABLE lojacarl_EAI_HotelReviews_Lab.food_reviews
+ALTER TABLE lojacarl_EAI_HotelReviews_Lab.food_review
 ADD COLUMN FullReview TEXT;
 
-UPDATE lojacarl_EAI_HotelReviews_Lab.food_reviews
+Start transaction;
+SET SQL_SAFE_UPDATES = 0;
+UPDATE lojacarl_EAI_HotelReviews_Lab.food_review
 SET FullReview = CONCAT(Summary, ' ', Text);
+SET SQL_SAFE_UPDATES = 1;
+commit;
+
+select count(*) from lojacarl_EAI_HotelReviews_Lab.food_review where score > 3;
+select count(*) from lojacarl_EAI_HotelReviews_Lab.food_review where score < 3;
+*/
+
+drop table training_set ;
+create table training_set (
+	id int not null auto_increment,
+    review_id int,
+    class int not null,
+    primary key (id) ,
+    foreign key (review_id) references food_review(id)
+);
+drop table testing_set ;
+create table testing_set (
+	id int not null auto_increment,
+    review_id int,
+	class int not null,
+    primary key (id) ,
+    foreign key (review_id) references food_review(id)
+);
+
+
+insert into training_set (review_id, class)
+select * from (
+	SELECT fr.id, 0
+	FROM food_review fr
+	WHERE fr.Score < 3
+	AND fr.id NOT IN (
+		SELECT result.review_id 
+		FROM (
+			SELECT review_id FROM testing_set 
+			UNION 
+			SELECT review_id FROM training_set
+		) result
+	)
+	order by fr.Score asc
+	LIMIT 1000
+) as subquery 
+order by rand() 
+limit 800;
+
+insert into testing_set (review_id, class)
+select * from (
+	SELECT fr.id, 0
+	FROM food_review fr
+	WHERE fr.Score < 3
+	AND fr.id NOT IN (
+		SELECT result.review_id 
+		FROM (
+			SELECT review_id FROM testing_set 
+			UNION 
+			SELECT review_id FROM training_set
+		) result
+	)
+	order by fr.Score asc
+	LIMIT 1000
+) as subquery 
+order by rand() 
+limit 200;
+
+-- -------------------------------------------------
+
+
+insert into training_set (review_id, class)
+select * from (
+	SELECT fr.id, 1
+	FROM food_review fr
+	WHERE fr.Score > 3
+	AND fr.id NOT IN (
+		SELECT result.review_id 
+		FROM (
+			SELECT review_id FROM testing_set 
+			UNION 
+			SELECT review_id FROM training_set
+		) result
+	)
+	order by fr.Score asc
+	LIMIT 1000
+) as subquery 
+order by rand() 
+limit 800;
+
+insert into testing_set (review_id, class)
+select * from (
+	SELECT fr.id, 1
+	FROM food_review fr
+	WHERE fr.Score > 3
+	AND fr.id NOT IN (
+		SELECT result.review_id 
+		FROM (
+			SELECT review_id FROM testing_set 
+			UNION 
+			SELECT review_id FROM training_set
+		) result
+	)
+	order by fr.Score asc
+	LIMIT 1000
+) as subquery 
+order by rand() 
+limit 200;
+
+select * from training_set tas inner join testing_set tes on tes.review_id = tas.review_id; -- should be empty
+
+select count(*) from training_set where class = 0;
+select count(*) from training_set where class = 1;
+select count(*) from testing_set where class = 0;
+select count(*) from testing_set where class = 1;

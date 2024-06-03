@@ -48,6 +48,33 @@ function getTermStatisticCount() {
     });
 }
 
+function getTermStatisticsFormated() {
+    let sql = ```SELECT 
+                    cl.description AS label,
+                    JSON_ARRAYAGG(
+                        JSON_OBJECT(
+                            'name', ts.name,
+                            'tfidf', ts.tfidf,
+                            'tf', ts.tf  
+                        )
+                    ) AS bagofwords
+                FROM term_statistic ts
+                JOIN termClass cl ON ts.classification = cl.class
+                GROUP BY cl.description
+                LIMIT 0, 1000;```;
+
+    return new Promise((resolve, reject) => {
+        connection.query(sql, function (err, rows, fields) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(rows[0].count);
+        });
+    });
+
+}
+
 function insertTermStatistic(term) {
     if (term == null) throw "Term must be provided";
 
@@ -87,8 +114,8 @@ function truncateTable() {
     });
 }
 
-class TermStatisticDTO{
-    constructor(name, binary, occurrences, tf, tfidf, docIds, classification){
+class TermStatisticDTO {
+    constructor(name, binary, occurrences, tf, tfidf, docIds, classification) {
         this.name = name;
         this.binary = binary;
         this.occurrences = occurrences;
@@ -98,7 +125,7 @@ class TermStatisticDTO{
         this.classification = classification;
     }
 
-    static termStatisticDTOToTermStatistics(termStatisticDTO){
+    static termStatisticDTOToTermStatistics(termStatisticDTO) {
         return new TermStatistic(
             termStatisticDTO.name,
             termStatisticDTO.binary,
@@ -110,7 +137,7 @@ class TermStatisticDTO{
         )
     }
 
-    static termStatisticTotermStatisticDTO(termStatistic){
+    static termStatisticTotermStatisticDTO(termStatistic) {
         return new TermStatisticDTO(
             termStatistic.name,
             termStatistic.binary,
