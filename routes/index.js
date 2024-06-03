@@ -1,6 +1,13 @@
 var express = require("express");
 var router = express.Router();
+var foodReviews = require("../database/repositories/foodReviewRepository.js");
 var hotelReviews = require("../database/repositories/hotelReviewRepository.js");
+const termRepository = require("../database/repositories/termRepository.js");
+const termStatisticRepository = require("../database/repositories/termStatisticRepository.js");
+var train = require("../classification/train.js");
+
+let isProcessing = false;
+let isProcessingDone = false;
 
 /**
  * @swagger
@@ -14,7 +21,7 @@ var hotelReviews = require("../database/repositories/hotelReviewRepository.js");
 router.get("/", async function (req, res, next) {
   let termCount = await termRepository.getTermCount()
   let termStatisticCount = await termStatisticRepository.getTermStatisticCount()
-  res.render("index", { title: "Hotel Reviews" , nTerms: termCount, nTermsStatistic: termStatisticCount});
+  res.render("index", { title: "Food Reviews", nTerms: termCount, nTermsStatistic: termStatisticCount });
 });
 
 /**
@@ -44,7 +51,7 @@ router.get("/positiveReviews/:limit?", async function (req, res, next) {
     res.render("error", { error });
     return;
   }
-  let reviews = await hotelReviews.getPositiveReviews(+limit);
+  let reviews = await foodReviews.getPositiveReviews(+limit);
   res.render("reviews", { title: "Positive Reviews", reviews: reviews });
 });
 
@@ -76,15 +83,16 @@ router.get("/negativeReviews/:limit?", async function (req, res, next) {
     return;
   }
 
-  let reviews = await hotelReviews.getNegativeReviews(+limit);
+  let reviews = await foodReviews.getNegativeReviews(+limit);
+
   res.render("reviews", { title: "Negative Reviews", reviews: reviews });
 });
 
 /**
  * @swagger
- * /review/{id}:
+ * /reviewHotel/{id}:
  *   get:
- *     summary: Get a single review by ID
+ *     summary: Get a single hotel review by ID
  *     parameters:
  *       - name: id
  *         in: path
@@ -98,7 +106,7 @@ router.get("/negativeReviews/:limit?", async function (req, res, next) {
  *       400:
  *         description: Invalid input
  */
-router.get("/review/:id", async function (req, res, next) {
+router.get("/reviewHotel/:id", async function (req, res, next) {
   let id = +req.params.id;
 
   if (id == undefined || isNaN(+id) || !Number.isInteger(+id) || (Number.isInteger(+id) && +id < 0)) {
@@ -107,17 +115,43 @@ router.get("/review/:id", async function (req, res, next) {
     res.render("error", { error });
     return;
   }
-  
+
   let review = await hotelReviews.getReview(+id);
-  res.render("listReviews", { reviews: [review] });
+  res.render("listHotelReviews", { reviews: [review] });
 });
 
-var train = require("../classification/train.js");
-const termRepository = require("../database/repositories/termRepository.js");
-const termStatisticRepository = require("../database/repositories/termStatisticRepository.js");
+/**
+ * @swagger
+ * /reviewFood/{id}:
+ *   get:
+ *     summary: Get a single food review by ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: Review ID
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Single review
+ *       400:
+ *         description: Invalid input
+ */
+router.get("/reviewFood/:id", async function (req, res, next) {
+  let id = +req.params.id;
 
-let isProcessing = false;
-let isProcessingDone = false;
+  if (id == undefined || isNaN(+id) || !Number.isInteger(+id) || (Number.isInteger(+id) && +id < 0)) {
+    const error = new Error('Invalid input');
+    error.status = 400;
+    res.render("error", { error });
+    return;
+  }
+
+  let review = await foodReviews.getReview(+id);
+
+  res.render("listFoodReviews", { reviews: [review] });
+});
 
 /**
  * @swagger
@@ -151,7 +185,7 @@ router.get("/processTerms", async function (req, res, next) {
                   window.location.href = '/doneProcessing';
                 }
               });
-          }, 1000);
+          }, 10000);
         </script>
       </head>
       <body>
@@ -161,6 +195,15 @@ router.get("/processTerms", async function (req, res, next) {
   `);
 });
 
+/**
+ * @swagger
+ * /processTermStatistics:
+ *   get:
+ *     summary: Start processing term statistics
+ *     responses:
+ *       200:
+ *         description: Processing started
+ */
 router.get("/processTermStatistics", async function (req, res, next) {
   if (!isProcessing) {
     isProcessing = true;
@@ -184,7 +227,7 @@ router.get("/processTermStatistics", async function (req, res, next) {
                   window.location.href = '/doneProcessing';
                 }
               });
-          }, 1000);
+          }, 10000);
         </script>
       </head>
       <body>

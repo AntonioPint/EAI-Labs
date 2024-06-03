@@ -7,7 +7,7 @@ document.getElementById('reviewForm').addEventListener('submit', function(event)
     var inputValue = document.getElementById('reviewInputValue').value;
 
     // Update the form action with the input value
-    var formAction = 'review/' + inputValue;
+    var formAction = 'reviewFood/' + inputValue;
     document.getElementById('reviewForm').setAttribute('action', formAction);
 
     // Submit the form

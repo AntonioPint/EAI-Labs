@@ -66,7 +66,8 @@ select * from (
 order by rand() 
 limit 200;
 
--------------------------------------------------
+-- ------------------------------------------------
+
 insert into training_set (review_id, class)
 select * from (
 	SELECT ht.id, 1

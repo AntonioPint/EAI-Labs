@@ -13,7 +13,7 @@ class Term {
         this.classification = classification;
     }
 
-    static createTermData(bagOfWords, documents, classification) {
+    static createTermData(bagOfWords, documents, classification, docIds) {
         const termData = [];
 
         for (let i = 0; i < bagOfWords.length; i++) {
@@ -28,7 +28,7 @@ class Term {
                 const binaryVector = bagOfWrds.binaryVector(bagOfWords, documents[j])
                 const occurrencesVector = bagOfWrds.numberOfOccurrencesVector(bagOfWords, documents[j])
 
-                termData.push(new Term(word, binaryVector[i], occurrencesVector[i], tfVector[i], idfVector[i], tfidfVector[i], j, word.split(" ").length, classification))
+                termData.push(new Term(word, binaryVector[i], occurrencesVector[i], tfVector[i], idfVector[i], tfidfVector[i], docIds[j], word.split(" ").length, classification))
             }
         }
         return termData

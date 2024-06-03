@@ -22,7 +22,6 @@ function getTerm(id) {
 }
 
 function getAllTerms() {
-
     return new Promise((resolve, reject) => {
         connection.query("SELECT * FROM term", function (err, rows, fields) {
             if (err) {
@@ -32,7 +31,6 @@ function getAllTerms() {
             let result = rows.map(e =>{ 
                 return new Term(e.name, e.binary, e.occurrences, e.tf, e.idf,e.tfidf,e.docId, e.wordCount, e.classification)
             })
-            console.log(result)
             resolve(result);
         });
     });
