@@ -28,10 +28,43 @@ function getAllTerms() {
                 reject(err);
                 return;
             }
-            let result = rows.map(e =>{ 
-                return new Term(e.name, e.binary, e.occurrences, e.tf, e.idf,e.tfidf,e.docId, e.wordCount, e.classification)
+            let result = rows.map(e => {
+                return new Term(e.name, e.binary, e.occurrences, e.tf, e.idf, e.tfidf, e.docId, e.wordCount, e.classification)
             })
             resolve(result);
+        });
+    });
+}
+
+function getAllTermsWithFilters(classification, wordCount) {
+    return new Promise((resolve, reject) => {
+        connection.query("SELECT * FROM term where classification = ? and wordCount = ?", [classification, wordCount], function (err, rows, fields) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            let result = rows.map(e => {
+                return new Term(e.name, e.binary, e.occurrences, e.tf, e.idf, e.tfidf, e.docId, e.wordCount, e.classification)
+            })
+            resolve(result);
+        });
+    });
+}
+
+function getIdfOfTerms(classification) {
+    let sql = "select t.name, sum(t.occurrences) as `occurrences`, idf , classification from term t where classification = ? group by t.name;"
+
+    return new Promise((resolve, reject) => {
+        connection.query(sql, [classification], function (err, rows, fields) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            let map = new Map()
+            rows.map((e) => {
+                map.set(e.name, { occurrences: e.occurrences, idf: e.idf, classification: e.classification })
+            })
+            resolve(map);
         });
     });
 }
@@ -94,6 +127,8 @@ module.exports = {
     getTerm: getTerm,
     getAllTerms: getAllTerms,
     insertTerm: insertTerm,
+    getIdfOfTerms: getIdfOfTerms,
     getTermCount: getTermCount,
-    truncateTable: truncateTable
+    truncateTable: truncateTable,
+    getAllTermsWithFilters: getAllTermsWithFilters,
 }

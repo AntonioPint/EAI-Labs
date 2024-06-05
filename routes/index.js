@@ -185,7 +185,7 @@ router.get("/processTerms", async function (req, res, next) {
                   window.location.href = '/doneProcessing';
                 }
               });
-          }, 10000);
+          }, 60000);
         </script>
       </head>
       <body>
@@ -227,7 +227,7 @@ router.get("/processTermStatistics", async function (req, res, next) {
                   window.location.href = '/doneProcessing';
                 }
               });
-          }, 10000);
+          }, 60000);
         </script>
       </head>
       <body>

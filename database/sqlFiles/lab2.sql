@@ -42,10 +42,10 @@ select * from (
 		) result
 	)
 	order by ht.Reviewer_Score asc
-	LIMIT 1000
+	LIMIT 200
 ) as subquery 
 order by rand() 
-limit 800;
+limit 160;
 
 insert into testing_set (review_id, class)
 select * from (
@@ -61,10 +61,10 @@ select * from (
 		) result
 	)
 	order by ht.Reviewer_Score asc
-	LIMIT 1000
+	LIMIT 200
 ) as subquery 
 order by rand() 
-limit 200;
+limit 40;
 
 -- ------------------------------------------------
 
@@ -82,10 +82,10 @@ select * from (
 		) result
 	)
 	order by ht.Reviewer_Score asc
-	LIMIT 1000
+	LIMIT 200
 ) as subquery 
 order by rand() 
-limit 800;
+limit 160;
 
 insert into testing_set (review_id, class)
 select * from (
@@ -101,10 +101,10 @@ select * from (
 		) result
 	)
 	order by ht.Reviewer_Score asc
-	LIMIT 1000
+	LIMIT 200
 ) as subquery 
 order by rand() 
-limit 200;
+limit 40;
 
 
 select * from training_set tas inner join testing_set tes on tes.review_id = tas.review_id -- should be empty

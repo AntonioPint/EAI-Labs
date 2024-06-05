@@ -43,3 +43,10 @@ input[type="submit"]:hover {
   aspect-ratio: 1;
   padding: 5px;
 }
+
+div#divOptions > * {
+  flex: 1 1 0px;
+  border-radius: 10px;
+  background-color: #eeeeee;
+  border: solid black 1px;
+}

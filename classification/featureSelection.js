@@ -6,7 +6,7 @@ function selectKBest(termsArray, metric, useAverage = false, k=null) {
         return result
     }
     if (k == null){
-        k = Math.floor(termsArray.length * .1)
+        k = Math.floor(termsArray.length * .2)
     }
 
     if (useAverage) {

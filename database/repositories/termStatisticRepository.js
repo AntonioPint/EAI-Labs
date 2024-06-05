@@ -49,19 +49,18 @@ function getTermStatisticCount() {
 }
 
 function getTermStatisticsFormated() {
-    let sql = ```SELECT 
-                    cl.description AS label,
+    let sql = ` SELECT cl.class AS label,
                     JSON_ARRAYAGG(
                         JSON_OBJECT(
                             'name', ts.name,
                             'tfidf', ts.tfidf,
                             'tf', ts.tf  
                         )
-                    ) AS bagofwords
+                    ) AS bagOfWords
                 FROM term_statistic ts
                 JOIN termClass cl ON ts.classification = cl.class
                 GROUP BY cl.description
-                LIMIT 0, 1000;```;
+                LIMIT 0, 1000;`;
 
     return new Promise((resolve, reject) => {
         connection.query(sql, function (err, rows, fields) {
@@ -69,7 +68,7 @@ function getTermStatisticsFormated() {
                 reject(err);
                 return;
             }
-            resolve(rows[0].count);
+            resolve(rows);
         });
     });
 
@@ -157,4 +156,5 @@ module.exports = {
     insertTermStatistic: insertTermStatistic,
     getTermStatisticCount: getTermStatisticCount,
     truncateTable: truncateTable,
+    getTermStatisticsFormated: getTermStatisticsFormated,
 }
