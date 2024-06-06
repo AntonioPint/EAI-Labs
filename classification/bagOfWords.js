@@ -24,7 +24,7 @@ function numberOfOccurrencesVector(bagOfWords, documents) {
     for (const word of bagOfWords) {
         let occurrences = 0;
         for (const document of documents) {
-            if (document.includes(word)) {
+            if (document == word) {
                 occurrences++;
             }
         }
@@ -34,7 +34,6 @@ function numberOfOccurrencesVector(bagOfWords, documents) {
 }
 
 function tfVector(bagOfWords, terms) {
-
     const tfVec = [];
     for (const word of bagOfWords) {
         const tf = counting.tf(terms, word)

@@ -78,11 +78,10 @@ if (!isMainThread) {
 
         for(let j = 0; j < workerBagOfWords.length; j++){
             const word = workerBagOfWords[j];
-            console.log(word)
+
             termData.push(new Term(word, binaryVector[j], occurrencesVector[j], tfVector[j], idfVector[j], tfidfVector[j], docIds[i], word.split(" ").length, classification ))
         }
     }
-
 
     parentPort.postMessage(termData);
 }

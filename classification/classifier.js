@@ -5,7 +5,7 @@ const termStatisticRepository = require("../database/repositories/termStatisticR
 
 async function cossineSimilarityResult(text) {
     let preProcessed = preprocessing(text, [1, 2])
-
+    console.log(preProcessed)
     preProcessed.tf = preProcessed.tokens.map(tokensNgram =>
         tokensNgram.map(token => counting.tf(tokensNgram, token))
     );
@@ -94,9 +94,5 @@ function cosineSimilarity(vector1, vector2) {
 }
 
 cossineSimilarityResult(`
-YUMMY! I got this for my Mum who is not diabetic but needs to watch her sugar intake,
- and my father who simply chooses to limit unnecessary sugar intake - she's the one with the sweet tooth 
- - they both LOVED these toffees, you would never guess that they're sugar-free and it's so great that 
- you can eat them pretty much guilt free!  i was so impressed that i've ordered some for myself 
- (w dark chocolate) to take to the office so i'll eat them instead of snacking on sugary sweets.<br />These are just EXCELLENT!   
+Spicy sweetness! I''ve always been drawn to K-Cup varieties with out there names (Jet Fuel, Black Tiger) and distinctive flavors (Golden French Toast, Spicy Mayan Chocolate). This offering melds those two features into something I''m happy to wake up to!<br /><br />To me, Jamaica Me Crazy''s definitely got a pervasive coconut taste fairly similar to Dunkin'' Donuts coconut flavored coffee, but it''s also got a lot of the flavor characteristics I''ve come to expect from K-Cup chocolate brews. Barely any of that acidic aftertaste that''s almost inevitable with artificial flavors, and definitely not as watery as many other K-cup varieties. Sure, the name''s pretty corny and the taste is hardly subtle or sophisticated, but that''s what makes this cup of joe so fun!
 `)

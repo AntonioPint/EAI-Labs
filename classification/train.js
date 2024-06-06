@@ -17,7 +17,6 @@ async function processTerms() {
 
     training_set.sort((a, b) => { return b.class - a.class })
 
-    // let preprocessedTraining = training_set.slice(139, 182)
     let preprocessedTraining = training_set.map(element => {
         let preProcessed = preprocessing(element.review_text, [1, 2])
 
@@ -29,12 +28,6 @@ async function processTerms() {
     });
 
 
-    // let a = preprocessedTraining[0]
-    // a.class = 0
-    // preprocessedTraining.push(a)
-
-
-    console.log(preprocessedTraining)
     //Essencial para conter apenas tokens quando arrayLength > 0
     preprocessedTraining = preprocessedTraining.filter(e => {
         return (e.tokens[0].length > 0 && e.tokens[1].length > 0)
@@ -42,8 +35,8 @@ async function processTerms() {
 
     // positives and negatives
     let semiDatasets = {
-        documentsUnigram: { positives: { data: [], docIds: [] }, negatives: { data: [], docIds: [] } },
-        documentsBigram: { positives: { data: [], docIds: [] }, negatives: { data: [], docIds: [] } },
+        documentsUnigram: { data: [], docIds: [] },
+        documentsBigram: { data: [], docIds: [] },
         unigramPositives: [],
         unigramNegatives: [],
         bigramPositives: [],
@@ -57,18 +50,17 @@ async function processTerms() {
         if (element.class == 0) {
             semiDatasets.unigramNegatives = bgOfWrds.addUniqueTerms(semiDatasets.unigramNegatives, unigram)
             semiDatasets.bigramNegatives = bgOfWrds.addUniqueTerms(semiDatasets.bigramNegatives, bigram)
-            semiDatasets.documentsUnigram.positives.docIds.push(element.docId)
-            semiDatasets.documentsBigram.positives.docIds.push(element.docId)
-            semiDatasets.documentsUnigram.positives.data.push(element.tokens[0])
-            semiDatasets.documentsBigram.positives.data.push(element.tokens[1])
+
         } else if (element.class == 1) {
             semiDatasets.unigramPositives = bgOfWrds.addUniqueTerms(semiDatasets.unigramPositives, unigram)
             semiDatasets.bigramPositives = bgOfWrds.addUniqueTerms(semiDatasets.bigramPositives, bigram)
-            semiDatasets.documentsUnigram.negatives.docIds.push(element.docId)
-            semiDatasets.documentsBigram.negatives.docIds.push(element.docId)
-            semiDatasets.documentsUnigram.negatives.data.push(element.tokens[0])
-            semiDatasets.documentsBigram.negatives.data.push(element.tokens[1])
         }
+
+        semiDatasets.documentsUnigram.docIds.push(element.docId)
+        semiDatasets.documentsBigram.docIds.push(element.docId)
+
+        semiDatasets.documentsUnigram.data.push(element.tokens[0])
+        semiDatasets.documentsBigram.data.push(element.tokens[1])
     })
 
     // const bagOfWords = ["room", "small", "messy", "breakfast", "very", "good", "few", "choices"];
@@ -83,11 +75,11 @@ async function processTerms() {
     // Define an array to store arrays of term data
     const termDataPromises = [];
     // Push arrays of term data for unigram positives, unigram negatives, bigram positives, and bigram negatives
-    termDataPromises.push(await Term.createTermData(semiDatasets.unigramPositives, semiDatasets.documentsUnigram.positives.data, 1, semiDatasets.documentsUnigram.positives.docIds));
-    termDataPromises.push(await Term.createTermData(semiDatasets.unigramNegatives, semiDatasets.documentsUnigram.negatives.data, 0, semiDatasets.documentsUnigram.negatives.docIds));
+    termDataPromises.push(await Term.createTermData(semiDatasets.unigramPositives, semiDatasets.documentsUnigram.data, 1, semiDatasets.documentsUnigram.docIds));
+    termDataPromises.push(await Term.createTermData(semiDatasets.unigramNegatives, semiDatasets.documentsUnigram.data, 0, semiDatasets.documentsUnigram.docIds));
 
-    termDataPromises.push(await Term.createTermData(semiDatasets.bigramPositives, semiDatasets.documentsBigram.positives.data, 1, semiDatasets.documentsBigram.positives.docIds));
-    termDataPromises.push(await Term.createTermData(semiDatasets.bigramNegatives, semiDatasets.documentsBigram.negatives.data, 0, semiDatasets.documentsBigram.negatives.docIds));
+    termDataPromises.push(await Term.createTermData(semiDatasets.bigramPositives, semiDatasets.documentsBigram.data, 1, semiDatasets.documentsBigram.docIds));
+    termDataPromises.push(await Term.createTermData(semiDatasets.bigramNegatives, semiDatasets.documentsBigram.data, 0, semiDatasets.documentsBigram.docIds));
 
     // Wait for all promises to resolve
     const resolvedResults = termDataPromises
@@ -125,8 +117,8 @@ async function processTermStatistics() {
     console.log("INSERTING  TERMS STATISTICS");
     for (const terms of resolvedResults) {
         let results = featureSelection.selectKBest(terms, "tfIdf", true)
-        for (const result of results)
-            await termStatisticRepository.insertTermStatistic(result)
+        for(const result of results)
+        await termStatisticRepository.insertTermStatistic(result)
     }
     console.log("FINISHED GENERATING TERM STATISTIC");
 }
