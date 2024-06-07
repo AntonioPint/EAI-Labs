@@ -75,10 +75,10 @@ select * from (
 		) result
 	)
 	order by fr.Score asc
-	LIMIT 1000
+	LIMIT 100
 ) as subquery 
 order by rand() 
-limit 800;
+limit 10;
 
 insert into testing_set (review_id, class)
 select * from (
@@ -94,10 +94,10 @@ select * from (
 		) result
 	)
 	order by fr.Score asc
-	LIMIT 1000
+	LIMIT 3
 ) as subquery 
 order by rand() 
-limit 200;
+limit 1;
 
 -- -------------------------------------------------
 
@@ -116,10 +116,10 @@ select * from (
 		) result
 	)
 	order by fr.Score asc
-	LIMIT 1000
+	LIMIT 100
 ) as subquery 
 order by rand() 
-limit 800;
+limit 10;
 
 insert into testing_set (review_id, class)
 select * from (
@@ -135,10 +135,10 @@ select * from (
 		) result
 	)
 	order by fr.Score asc
-	LIMIT 1000
+	LIMIT 10
 ) as subquery 
 order by rand() 
-limit 200;
+limit 1;
 
 select * from training_set tas inner join testing_set tes on tes.review_id = tas.review_id; -- should be empty
 
@@ -146,3 +146,15 @@ select count(*) from training_set where class = 0;
 select count(*) from training_set where class = 1;
 select count(*) from testing_set where class = 0;
 select count(*) from testing_set where class = 1;
+
+
+DROP TABLE IF EXISTS term_counter;
+
+CREATE TABLE term_counter (
+    id INT NOT NULL AUTO_INCREMENT,
+    name TEXT,
+    occurrences INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (id)
+);
+
+insert into term_counter(name, occurrences) values ("name", 2)

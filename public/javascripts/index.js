@@ -41,3 +41,37 @@ document.getElementById('negativeReviewsForm').addEventListener('submit', functi
     // Submit the form
     this.submit();
 });
+
+document.getElementById('classifierForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const phrase = document.getElementById('textToclassify').value;
+
+    fetch('classify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+        'phrase': phrase
+      })
+    })
+    .then(response => response.json())
+    .then(result => {
+      const classifierResult = document.getElementById('classifierResult');
+      const similarityValues = document.getElementById('similarityValues');
+
+      if (result.decision === "Negative") {
+        classifierResult.textContent = "Negative";
+        classifierResult.style.color = "red";
+      } else if (result.decision === "Positive") {
+        classifierResult.textContent = "Positive";
+        classifierResult.style.color = "green";
+      }
+
+      similarityValues.textContent = `Similarity values: ${result.similarityCossenPositiveNegative.join(', ')}`;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });

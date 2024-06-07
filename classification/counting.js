@@ -23,6 +23,7 @@ function tf(document, word) {
 }
 
 function idf(N, d) {
+    if (d == 0) throw "o número de documentos em que o termo t ocorre não pode ser 0"
     return Math.log10(N / d)
 }
 

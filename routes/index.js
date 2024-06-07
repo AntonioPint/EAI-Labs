@@ -5,6 +5,7 @@ var hotelReviews = require("../database/repositories/hotelReviewRepository.js");
 const termRepository = require("../database/repositories/termRepository.js");
 const termStatisticRepository = require("../database/repositories/termStatisticRepository.js");
 var train = require("../classification/train.js");
+const { cossineSimilarityResult } = require("../classification/classifier.js");
 
 let isProcessing = false;
 let isProcessingDone = false;
@@ -262,5 +263,11 @@ router.get('/checkProcessingStatus', function (req, res, next) {
 router.get('/doneProcessing', function (req, res, next) {
   res.send('Processing is complete! <a href="/">Go back</a>');
 });
+
+router.post('/classify', async function( req, res, next){
+  cossineSimilarityResult(req.body.phrase).then( e=> {
+    res.send(e)
+  })
+})
 
 module.exports = router;

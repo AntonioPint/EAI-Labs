@@ -40,7 +40,7 @@ function selectKBest(termsArray, metric, useAverage = false, k=null) {
         // Sort in descending order
         return bValue - aValue;
     })
-    
+    // result = result.filter(e => {return e.docIds.length >= minOccurences})
     // Return the top K terms
     return result.slice(0, k);
 }

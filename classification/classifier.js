@@ -5,7 +5,7 @@ const termStatisticRepository = require("../database/repositories/termStatisticR
 
 async function cossineSimilarityResult(text) {
     let preProcessed = preprocessing(text, [1, 2])
-    console.log(preProcessed)
+
     preProcessed.tf = preProcessed.tokens.map(tokensNgram =>
         tokensNgram.map(token => counting.tf(tokensNgram, token))
     );
@@ -20,10 +20,10 @@ async function cossineSimilarityResult(text) {
         termStatisticRepository.getTermStatisticsFormated()
     ]);
 
-    for(let termStatistic of termsStatistics){
+    for (let termStatistic of termsStatistics) {
         termStatistic.bagOfWords = JSON.parse(termStatistic.bagOfWords)
     }
-    
+
     let termPositivesList = termsStatistics.find(term => term.label === 1)?.bagOfWords || [];
 
     let termNegativesList = termsStatistics.find(term => term.label === 0)?.bagOfWords || [];
@@ -56,12 +56,12 @@ async function cossineSimilarityResult(text) {
     let similarityCossenPositive = cosineSimilarity(preProcessed.tfidfPositive, originalTfidfPositive)
     let similarityCossenNegative = cosineSimilarity(preProcessed.tfidfNegative, originalTfidfNegative)
 
-    console.log([similarityCossenPositive, similarityCossenNegative])
     let decision = (similarityCossenPositive > similarityCossenNegative) ? "Positive" : "Negative"
 
-    console.log(preProcessed.preprocessedText)
-    console.log(decision)
-
+    return {
+        decision: decision, 
+        similarityCossenPositiveNegative: [similarityCossenPositive, similarityCossenNegative]
+    }
 }
 
 function cosineSimilarity(vector1, vector2) {
@@ -93,6 +93,7 @@ function cosineSimilarity(vector1, vector2) {
     return similarity;
 }
 
-cossineSimilarityResult(`
-Spicy sweetness! I''ve always been drawn to K-Cup varieties with out there names (Jet Fuel, Black Tiger) and distinctive flavors (Golden French Toast, Spicy Mayan Chocolate). This offering melds those two features into something I''m happy to wake up to!<br /><br />To me, Jamaica Me Crazy''s definitely got a pervasive coconut taste fairly similar to Dunkin'' Donuts coconut flavored coffee, but it''s also got a lot of the flavor characteristics I''ve come to expect from K-Cup chocolate brews. Barely any of that acidic aftertaste that''s almost inevitable with artificial flavors, and definitely not as watery as many other K-cup varieties. Sure, the name''s pretty corny and the taste is hardly subtle or sophisticated, but that''s what makes this cup of joe so fun!
-`)
+
+module.exports = { 
+    cossineSimilarityResult: cossineSimilarityResult 
+}

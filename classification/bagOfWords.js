@@ -13,24 +13,16 @@ function addUniqueTerms(array1, array2) {
     return array1;
 }
 
-function binaryVector(bagOfWords, documents) {
-    return numberOfOccurrencesVector(bagOfWords, documents).map((val) => {
-        return +(val > 0)
+function binaryVector(bagOfWords, document) {
+    return bagOfWords.map((val) => {
+        return counting.exists(document, val)
     })
 }
 
-function numberOfOccurrencesVector(bagOfWords, documents) {
-    const occurrencesVec = [];
-    for (const word of bagOfWords) {
-        let occurrences = 0;
-        for (const document of documents) {
-            if (document == word) {
-                occurrences++;
-            }
-        }
-        occurrencesVec.push(occurrences);
-    }
-    return occurrencesVec;
+function numberOfOccurrencesVector(bagOfWords, document) {
+    return bagOfWords.map((val) => {
+        return counting.numberOfOccurrences(val, document)
+    })
 }
 
 function tfVector(bagOfWords, terms) {
@@ -44,17 +36,36 @@ function tfVector(bagOfWords, terms) {
 
 
 function idfVector(bagOfWords, documents) {
-    const idfVec = [];
-    const numDocuments = documents.length;
-    const occurrencesVec = numberOfOccurrencesVector(bagOfWords, documents);
-    for (let i = 0; i < bagOfWords.length; i++) {
-        const numDocumentsWithTerm = occurrencesVec[i];
 
-        const idf = numDocumentsWithTerm != 0 ?
-            counting.idf(numDocuments, numDocumentsWithTerm) : 0;
-        idfVec.push(idf);
+    const numDocuments = documents.length;
+    let numDocumentsWithTerm = new Array(bagOfWords.length).fill(0);
+    for (let i = 0; i < documents.length; i++){
+        const occurrencesVec = binaryVector(bagOfWords, documents[i]);
+        numDocumentsWithTerm = sumArrays(numDocumentsWithTerm, occurrencesVec)
     }
-    return idfVec;
+
+    return bagOfWords.map((e, index) =>{
+        return counting.idf(numDocuments, numDocumentsWithTerm[index])
+    })
+}
+
+function sumArrays(arr1, arr2) {
+    // Check if both arrays have the same length
+    if (arr1.length !== arr2.length) {
+        throw new Error("Arrays must have the same length");
+    }
+    
+    // Initialize an array to store the sum of arrays
+    let result = [];
+    
+    // Iterate through each element of the arrays
+    for (let i = 0; i < arr1.length; i++) {
+        // Add corresponding elements and push the result to the result array
+        result.push(arr1[i] + arr2[i]);
+    }
+    
+    // Return the resulting array
+    return result;
 }
 
 function tfidfVector(tfVector, idfVector) {

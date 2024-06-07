@@ -1,62 +1,90 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/index.css" />
+  </head>
 
-<head>
-  <title>
-    <%= title %>
-  </title>
-  <link rel="stylesheet" href="/stylesheets/style.css" />
-  <link rel="stylesheet" href="/stylesheets/index.css" />
-</head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
 
-<body>
-  <h1>
-    <%= title %>
-  </h1>
-  <p>Welcome to <%= title %>
-  </p>
+    <div id="divOptions">
+      <div id="selects">
+        <h2>Selects</h2>
+        <form id="reviewForm" method="get" action="/reviewFood/:id">
+          <label for="reviewInputValue">GET /reviewFood/:id</label>
+          <input type="text" id="reviewInputValue" placeholder="Enter value" />
+          <input type="submit" value="Submit" />
+        </form>
 
-  <div id="divOptions">
-    <div id="selects">
-      <h2>Selects</h2>
-      <form id="reviewForm" method="get" action="/reviewFood/:id">
-        <label for="reviewInputValue">GET /reviewFood/:id</label>
-        <input type="text" id="reviewInputValue" placeholder="Enter value" />
-        <input type="submit" value="Submit" />
-      </form>      
+        <form id="positiveReviewsForm" method="get" action="positiveReviews">
+          <label for="positiveReviewInputValue"
+            >GET /positiveReviews/:limit</label
+          >
+          <input
+            type="text"
+            id="positiveReviewInputValue"
+            placeholder="Enter value"
+          />
+          <input type="submit" value="Submit" />
+        </form>
 
-      <form id="positiveReviewsForm" method="get" action="positiveReviews">
-        <label for="positiveReviewInputValue">GET /positiveReviews/:limit</label>
-        <input type="text" id="positiveReviewInputValue" placeholder="Enter value" />
-        <input type="submit" value="Submit" />
-      </form>
+        <form id="negativeReviewsForm" method="get" action="negativeReviews">
+          <label for="negativeReviewInputValue"
+            >GET /negativeReviews/:limit</label
+          >
+          <input
+            type="text"
+            id="negativeReviewInputValue"
+            placeholder="Enter value"
+          />
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+      <div id="process">
+        <h2>Process</h2>
 
-      <form id="negativeReviewsForm" method="get" action="negativeReviews">
-        <label for="negativeReviewInputValue">GET /negativeReviews/:limit</label>
-        <input type="text" id="negativeReviewInputValue" placeholder="Enter value" />
-        <input type="submit" value="Submit" />
-      </form>
+        <form method="get" action="processTerms">
+          <label for="processSubmit">
+            Process all Terms into BD. Already stored: <%= nTerms %></label
+          >
+          <input type="submit" id="processSubmit" value="Submit" />
+        </form>
+
+        <form method="get" action="processTermStatistics">
+          <label for="processSubmit">
+            Process all Terms Statistics into BD. Already stored: <%=
+            nTermsStatistic %></label
+          >
+          <input type="submit" id="processSubmit" value="Submit" />
+        </form>
+      </div>
+      <div id="classifier">
+        <h2>Class Identifier</h2>
+        <form id="classifierForm" method="post" action="classify">
+          <label for="textToclassify">Phrase Classification</label>
+          <input
+            type="text"
+            id="textToclassify"
+            name="phrase"
+            placeholder="Enter a phrase"
+          />
+          <input type="submit" id="processSubmit" value="Submit" />
+        </form>
+
+        <div>
+          <h3>Result</h3>
+          <span id="classifierResult"></span>
+          <div id="similarityValues"></div>
+        </div>
+      </div>
     </div>
-    <div id="process">
-      <h2>Process</h2>
 
-      <form method="get" action="processTerms">
-        <label for="processSubmit"> Process all Terms into BD. Already stored: <%= nTerms %></label>
-        <input type="submit" id="processSubmit" value="Submit" />
-      </form>
-
-      <form method="get" action="processTermStatistics">
-        <label for="processSubmit"> Process all Terms Statistics into BD. Already stored: <%= nTermsStatistic %></label>
-        <input type="submit" id="processSubmit" value="Submit" />
-      </form>
-    </div>
-  </div>
-
-  <a href="/api-docs">
-    <img id="swaggerLink" src="/images/Swagger-logo.png">
-  </a>
-
-</body>
-<script src="/javascripts/index.js" defer></script>
-
+    <a href="/api-docs">
+      <img id="swaggerLink" src="/images/Swagger-logo.png" />
+    </a>
+  </body>
+  <script src="/javascripts/index.js" defer></script>
 </html>
