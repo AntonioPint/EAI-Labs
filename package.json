@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon ./bin/www",
-    "start": "node ./bin/www",
+    "start": "node --max-old-space-size=32768 ./bin/www",
     "swagger-autogen": "node ./bin/www/swagger-autogen.js"
   },
   "dependencies": {

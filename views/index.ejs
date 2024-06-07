@@ -80,7 +80,36 @@
           <div id="similarityValues"></div>
         </div>
       </div>
+
+      <div>
+        <h2>Matriz de confusão</h2> 
+        <table>
+          <th style="visibility: hidden"></th>
+          <th>Predicted Positive</th>
+          <th>Predicted Negative</th>
+          <tr>
+              <th>Actual Positive</th>
+              <td class="tp">True Positive (TP)
+                <div id="tpResult">10</div>
+              </td>
+              <td class="fn">False Negative (FN)
+                <div id="fnResult">10</div>
+              </td>
+          </tr>
+          <tr>
+              <th>Actual Negative</th>
+              <td class="fp">False Positive (FP)
+                <div id="fpResult">10</div>
+              </td>
+              <td class="tn">True Negative (TN)
+                <div id="tnResult">10</div>
+              </td>
+          </tr>
+      </table>
+      </div>
     </div>
+
+    
 
     <a href="/api-docs">
       <img id="swaggerLink" src="/images/Swagger-logo.png" />

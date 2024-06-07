@@ -1,6 +1,6 @@
 /* Form styling */
 form {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 label {
@@ -26,15 +26,16 @@ input[type="submit"]:hover {
   background-color: #45a049;
 }
 
-#divOptions{
+#divOptions {
   display: flex;
   flex-wrap: wrap;
 }
-#divOptions *{
+
+#divOptions * {
   margin: 5px;
 }
 
-#swaggerLink{
+#swaggerLink {
   display: block;
   position: fixed;
   bottom: 0;
@@ -44,9 +45,52 @@ input[type="submit"]:hover {
   padding: 5px;
 }
 
-div#divOptions > * {
+div#divOptions>* {
   flex: 1 1 0px;
   border-radius: 10px;
   background-color: #eeeeee;
   border: solid black 1px;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 50%;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+th {
+  background-color: #f2f2f2;
+  color: black;
+}
+
+.tp {
+  background-color: #4caf4f;
+  color: white;
+}
+
+.tn {
+  background-color: #2195f3;
+  color: white;
+}
+
+.fp {
+  background-color: #f44336;
+  color: white;
+}
+
+.fn {
+  background-color: #ff9900;
+  color: white;
 }

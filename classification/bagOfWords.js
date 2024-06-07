@@ -39,12 +39,12 @@ function idfVector(bagOfWords, documents) {
 
     const numDocuments = documents.length;
     let numDocumentsWithTerm = new Array(bagOfWords.length).fill(0);
-    for (let i = 0; i < documents.length; i++){
+    for (let i = 0; i < documents.length; i++) {
         const occurrencesVec = binaryVector(bagOfWords, documents[i]);
         numDocumentsWithTerm = sumArrays(numDocumentsWithTerm, occurrencesVec)
     }
 
-    return bagOfWords.map((e, index) =>{
+    return bagOfWords.map((e, index) => {
         return counting.idf(numDocuments, numDocumentsWithTerm[index])
     })
 }
@@ -54,16 +54,16 @@ function sumArrays(arr1, arr2) {
     if (arr1.length !== arr2.length) {
         throw new Error("Arrays must have the same length");
     }
-    
+
     // Initialize an array to store the sum of arrays
     let result = [];
-    
+
     // Iterate through each element of the arrays
     for (let i = 0; i < arr1.length; i++) {
         // Add corresponding elements and push the result to the result array
         result.push(arr1[i] + arr2[i]);
     }
-    
+
     // Return the resulting array
     return result;
 }
@@ -77,6 +77,8 @@ function sumVector(termsArray) {
     if (termsArray.length === 0) {
         return null; // ou [] se preferir retornar um array vazio
     }
+
+    termsArray = removeOutliersByMinOccurrences(termsArray)
 
     // Criar um mapa para agrupar os termos pelo nome
     const termGroups = new Map();
@@ -125,16 +127,16 @@ function sumVector(termsArray) {
     })
 
     // Retornar os vetores de soma de cada grupo
-    return removeOutliersByMinOccurrences(
-        Array.from(termGroups.values())
-    );
+    return Array.from(termGroups.values())
 
 }
 
 function avgVector(termsArray) {
     if (termsArray.length === 0) {
-        return null; 
+        return null;
     }
+
+    termsArray = removeOutliersByMinOccurrences(termsArray)
 
     // Criar um mapa para agrupar os termos pelo nome
     const termGroups = new Map();
@@ -194,12 +196,30 @@ function avgVector(termsArray) {
             classification: group.classification
         };
     });
-    return removeOutliersByMinOccurrences(avgVectors,0);
+    return avgVectors
 }
 
-function removeOutliersByMinOccurrences(vectors, minOccurrences = 2) {
-    // Filter out vectors based on minimum occurrences
-    return vectors.filter(vector => vector.occurrences >= minOccurrences);
+function removeOutliersByMinOccurrences(termsArray, minOccurrences = 3) {
+
+    // Step 1: Group by name and calculate the sum of binary
+    const nameToBinarySum = termsArray.reduce((acc, term) => {
+        if (!acc[term.name]) {
+            acc[term.name] = 0;
+        }
+        acc[term.name] += term.binary;
+        return acc;
+    }, {});
+
+    // Step 2: Filter names with a binary sum greater than minOccurrences
+    const namesWithBinarySumGreaterThanMin = Object.keys(nameToBinarySum).filter(name => nameToBinarySum[name] >= minOccurrences);
+
+    // Step 3: Filter the original data
+    const filteredTerms = termsArray.filter(term =>
+        namesWithBinarySumGreaterThanMin.includes(term.name) && term.classification === 1
+    );
+
+    return filteredTerms;
+
 }
 
 module.exports = {
