@@ -1,4 +1,10 @@
 // stats.js
+const minimist = require('minimist');
+
+// Parse command-line arguments
+const args = minimist(process.argv.slice(2));
+const start = args.start ? parseInt(args.start, 10) : null;
+const end = args.end ? parseInt(args.end, 10) : null;
 
 const { getTestingSet } = require("../database/repositories/trainAndTestingSets");
 const { cossineSimilarityResult } = require("../classification/classifier.js");
@@ -6,6 +12,16 @@ const { cossineSimilarityResult } = require("../classification/classifier.js");
 
 async function getStats() {
     let testingSet = await getTestingSet();
+
+    console.log("gui")
+    console.log(start)
+    console.log(end)
+
+    // Slice the array if start and end parameters are provided
+    if (start !== null && end !== null) {
+        testingSet = testingSet.slice(start, end);
+    }
+    
 
     // Transformar a estrutura dos dados
     let predictions = await Promise.all(testingSet.map(async (item) => {
