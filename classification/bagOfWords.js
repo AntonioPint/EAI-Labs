@@ -136,7 +136,7 @@ function avgVector(termsArray) {
         return null;
     }
 
-    termsArray = removeOutliersByMinOccurrences(termsArray)
+    termsArray = removeOutliersByMinOccurrences(termsArray,0)
 
     // Criar um mapa para agrupar os termos pelo nome
     const termGroups = new Map();
