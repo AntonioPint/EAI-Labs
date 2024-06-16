@@ -117,6 +117,8 @@ async function processTermStatistics() {
         await termRepository.getAllTermsWithFilters(1, 2)
     ]
 
+    // resolvedResults[0] = resolvedResults[0].slice(0,5) 
+
     console.log("GENERATING TERM STATISTIC"); await termStatisticRepository.truncateTable()
 
     console.log("INSERTING  TERMS STATISTICS");

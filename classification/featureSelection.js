@@ -15,7 +15,6 @@ function selectKBest(termsArray, metric, useAverage = false, k=null) {
         result = bagOfWords.sumVector(termsArray)
     }
 
-    console.log(result)
 
     result.sort((a, b) => {
         let aValue, bValue;
@@ -44,7 +43,6 @@ function selectKBest(termsArray, metric, useAverage = false, k=null) {
     })
     // result = result.filter(e => {return e.docIds.length >= minOccurences})
     // Return the top K terms
-    console.log(k)
     return result.slice(0, k);
 }
 

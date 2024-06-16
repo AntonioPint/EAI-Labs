@@ -60,11 +60,11 @@ document.getElementById('classifierForm').addEventListener('submit', function(ev
     .then(result => {
       const classifierResult = document.getElementById('classifierResult');
       const similarityValues = document.getElementById('similarityValues');
-
-      if (result.decision === "Negative") {
+      console.log(result)
+      if (result.decision === 0) {
         classifierResult.textContent = "Negative";
         classifierResult.style.color = "red";
-      } else if (result.decision === "Positive") {
+      } else if (result.decision === 1) {
         classifierResult.textContent = "Positive";
         classifierResult.style.color = "green";
       }

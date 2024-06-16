@@ -12,11 +12,7 @@ const { cossineSimilarityResult } = require("../classification/classifier.js");
 
 async function getStats() {
     let testingSet = await getTestingSet();
-
-    console.log("gui")
-    console.log(start)
-    console.log(end)
-
+    testingSet = testingSet.slice(190,210)
     // Slice the array if start and end parameters are provided
     if (start !== null && end !== null) {
         testingSet = testingSet.slice(start, end);
