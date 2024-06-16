@@ -56,7 +56,7 @@ async function cossineSimilarityResult(text) {
     let similarityCossenPositive = cosineSimilarity(preProcessed.tfidfPositive, originalTfidfPositive)
     let similarityCossenNegative = cosineSimilarity(preProcessed.tfidfNegative, originalTfidfNegative)
 
-    let decision = (similarityCossenPositive > similarityCossenNegative) ? "Positive" : "Negative"
+    let decision = +(similarityCossenPositive > similarityCossenNegative)
 
     return {
         decision: decision, 

@@ -75,3 +75,37 @@ document.getElementById('classifierForm').addEventListener('submit', function(ev
       console.error('Error:', error);
     });
   });
+
+  document.getElementById('form-matrix').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    
+    fetch('matrix', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+    })
+    .then(response => response.json())
+    .then(result => {
+
+      document.getElementById("tpResult").innerText = result.matrix[0][0];
+      document.getElementById("fnResult").innerText = result.matrix[0][1];
+      document.getElementById("fpResult").innerText = result.matrix[1][0];
+      document.getElementById("tnResult").innerText = result.matrix[1][1];
+
+      document.getElementById("prec").innerText += result.prec;
+      document.getElementById("rec").innerText += result.rec;
+      document.getElementById("f1").innerText += result.f1;
+
+      document.getElementById("table-matrix").style.display = "";
+      document.getElementById("form-matrix").style.display = "none";
+
+      console.log(result.debugPredictions)
+
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+});

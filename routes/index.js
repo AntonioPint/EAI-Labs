@@ -6,6 +6,7 @@ const termRepository = require("../database/repositories/termRepository.js");
 const termStatisticRepository = require("../database/repositories/termStatisticRepository.js");
 var train = require("../classification/train.js");
 const { cossineSimilarityResult } = require("../classification/classifier.js");
+const { getStats } = require("../classification/stats.js")
 
 let isProcessing = false;
 let isProcessingDone = false;
@@ -266,6 +267,12 @@ router.get('/doneProcessing', function (req, res, next) {
 
 router.post('/classify', async function( req, res, next){
   cossineSimilarityResult(req.body.phrase).then( e=> {
+    res.send(e)
+  })
+})
+
+router.post('/matrix', async function( req, res, next){
+  getStats().then( e=> {
     res.send(e)
   })
 })

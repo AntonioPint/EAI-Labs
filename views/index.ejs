@@ -83,29 +83,40 @@
 
       <div>
         <h2>Matriz de confusão</h2> 
-        <table>
-          <th style="visibility: hidden"></th>
-          <th>Predicted Positive</th>
-          <th>Predicted Negative</th>
-          <tr>
-              <th>Actual Positive</th>
-              <td class="tp">True Positive (TP)
-                <div id="tpResult">10</div>
-              </td>
-              <td class="fn">False Negative (FN)
-                <div id="fnResult">10</div>
-              </td>
-          </tr>
-          <tr>
-              <th>Actual Negative</th>
-              <td class="fp">False Positive (FP)
-                <div id="fpResult">10</div>
-              </td>
-              <td class="tn">True Negative (TN)
-                <div id="tnResult">10</div>
-              </td>
-          </tr>
-      </table>
+        <form id="form-matrix" action="/matrix" method="post">
+            <button type="submit">Generate</button>
+        </form>
+        <div id="table-matrix" style="display: none;" >
+          <table>
+            <th style="visibility: hidden"></th>
+            <th>Predicted Positive</th>
+            <th>Predicted Negative</th>
+            <tr>
+                <th>Actual Positive</th>
+                <td class="tp">True Positive (TP)
+                  <div id="tpResult">placeholder</div>
+                </td>
+                <td class="fn">False Negative (FN)
+                  <div id="fnResult">placeholder</div>
+                </td>
+            </tr>
+            <tr>
+                <th>Actual Negative</th>
+                <td class="fp">False Positive (FP)
+                  <div id="fpResult">placeholder</div>
+                </td>
+                <td class="tn">True Negative (TN)
+                  <div id="tnResult">placeholder</div>
+                </td>
+            </tr>
+        </table>
+        <div>
+          <h2>Metricas</h2>
+          <h5 id="prec">Prec: </h5>
+          <h5 id="rec">Rec: </h5>
+          <h5 id="f1">F1:</h5>
+        </div>
+        </div>
       </div>
     </div>
 
