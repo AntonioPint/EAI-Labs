@@ -2,7 +2,7 @@
 
 const connection = require("../config.js");
 const Term = require("../dto/Term.js");
-const TermStatistic = require("../dto/termStatistic.js");
+const TermStatistic = require("../dto/TermStatistic.js");
 
 
 function getTermStatistic(id) {
