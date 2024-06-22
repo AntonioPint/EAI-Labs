@@ -26,7 +26,6 @@ async function processTerms() {
 
         return { class: element.class, ...preProcessed, docId: element.id }
     });
-    preprocessedTraining = preprocessedTraining.slice(775, 825)
 
     //Essencial para conter apenas tokens quando arrayLength > 0
     preprocessedTraining = preprocessedTraining.filter(e => {
