@@ -6,7 +6,7 @@ function selectKBest(termsArray, metric, useAverage = false, k=null) {
         return result
     }
     if (k == null){
-        k = Math.floor(termsArray.length * .2)
+        k = Math.ceil(termsArray.length * .2)
     }
 
     if (useAverage) {
@@ -14,6 +14,7 @@ function selectKBest(termsArray, metric, useAverage = false, k=null) {
     } else {
         result = bagOfWords.sumVector(termsArray)
     }
+
 
     result.sort((a, b) => {
         let aValue, bValue;

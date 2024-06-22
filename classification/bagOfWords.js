@@ -78,7 +78,7 @@ function sumVector(termsArray) {
         return null; // ou [] se preferir retornar um array vazio
     }
 
-    termsArray = removeOutliersByMinOccurrences(termsArray)
+    termsArray = removeOutliersByMinOccurrences(termsArray, 3)
 
     // Criar um mapa para agrupar os termos pelo nome
     const termGroups = new Map();
@@ -132,11 +132,12 @@ function sumVector(termsArray) {
 }
 
 function avgVector(termsArray) {
+
     if (termsArray.length === 0) {
         return null;
     }
 
-    termsArray = removeOutliersByMinOccurrences(termsArray)
+    termsArray = removeOutliersByMinOccurrences(termsArray, 3)
 
     // Criar um mapa para agrupar os termos pelo nome
     const termGroups = new Map();
@@ -144,7 +145,6 @@ function avgVector(termsArray) {
     // Iterar sobre os termos para agrupá-los pelo nome
     termsArray.forEach(term => {
         let storedTerm = termGroups.get(term.name)
-
         if (storedTerm == null) {
             if (term.binary) {
                 termGroups.set(term.name, {
@@ -196,30 +196,13 @@ function avgVector(termsArray) {
             classification: group.classification
         };
     });
+
     return avgVectors
 }
 
 function removeOutliersByMinOccurrences(termsArray, minOccurrences = 0) {
 
-    // Step 1: Group by name and calculate the sum of binary
-    const nameToBinarySum = termsArray.reduce((acc, term) => {
-        if (!acc[term.name]) {
-            acc[term.name] = 0;
-        }
-        acc[term.name] += term.binary;
-        return acc;
-    }, {});
-
-    // Step 2: Filter names with a binary sum greater than minOccurrences
-    const namesWithBinarySumGreaterThanMin = Object.keys(nameToBinarySum).filter(name => nameToBinarySum[name] >= minOccurrences);
-
-    // Step 3: Filter the original data
-    const filteredTerms = termsArray.filter(term =>
-        namesWithBinarySumGreaterThanMin.includes(term.name) && term.classification === 1
-    );
-
-    return filteredTerms;
-
+    return termsArray.filter(e => {return  e.occurrences >= minOccurrences});
 }
 
 module.exports = {

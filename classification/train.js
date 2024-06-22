@@ -117,14 +117,16 @@ async function processTermStatistics() {
         await termRepository.getAllTermsWithFilters(1, 2)
     ]
 
-    console.log("GENERATING TERM STATISTIC"); await termStatisticRepository.truncateTable()
+    // resolvedResults[0] = resolvedResults[0].slice(0,5) 
 
+    console.log("GENERATING TERM STATISTIC"); await termStatisticRepository.truncateTable()
 
     console.log("INSERTING  TERMS STATISTICS");
     for (const terms of resolvedResults) {
         let results = featureSelection.selectKBest(terms, "tfIdf", true)
-        for(const result of results)
-        await termStatisticRepository.insertTermStatistic(result)
+        for(const result of results){
+            await termStatisticRepository.insertTermStatistic(result)
+        }
     }
     console.log("FINISHED GENERATING TERM STATISTIC");
 }
