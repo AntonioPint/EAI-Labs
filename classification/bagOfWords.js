@@ -199,7 +199,7 @@ function avgVector(termsArray) {
     return avgVectors
 }
 
-function removeOutliersByMinOccurrences(termsArray, minOccurrences = 3) {
+function removeOutliersByMinOccurrences(termsArray, minOccurrences = 0) {
 
     // Step 1: Group by name and calculate the sum of binary
     const nameToBinarySum = termsArray.reduce((acc, term) => {

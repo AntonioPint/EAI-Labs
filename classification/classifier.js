@@ -2,6 +2,11 @@ const counting = require("./counting.js")
 const preprocessing = require("./preprocessing.js")
 const termRepository = require("../database/repositories/termRepository.js");
 const termStatisticRepository = require("../database/repositories/termStatisticRepository.js");
+const bayes = require("./bayes.js");
+
+const PositiveApriori = bayes.classProbability(1);
+const NegativeApriori = bayes.classProbability(0);
+
 
 async function cossineSimilarityResult(text) {
     let preProcessed = preprocessing(text, [1, 2])
@@ -91,6 +96,52 @@ function cosineSimilarity(vector1, vector2) {
     let similarity = dotProduct / (magnitude1 * magnitude2);
 
     return similarity;
+}
+
+async function probabilisticClassification(texto){
+
+
+    //1 get words from texto
+    //2  clean, until tokens
+    let preProcessed = preprocessing(texto, [1, 2])
+    preProcessed.tf = preProcessed.tokens.map(tokensNgram =>
+        tokensNgram.map(token => counting.tf(tokensNgram, token))
+    );
+    preProcessed.tokens = [].concat(...preProcessed.tokens)
+    preProcessed.tf = [].concat(...preProcessed.tf)
+    preProcessed.tfidfPositive = []
+    preProcessed.tfidfNegative = []
+
+    let [termsOriginalNegative, termsOriginalPositive, termsStatistics] = await Promise.all([
+        termRepository.getIdfOfTerms(0),
+        termRepository.getIdfOfTerms(1),
+        termStatisticRepository.getTermStatisticsFormated()
+    ]);
+    
+
+    term_statisic = termStatisticRepository.getAllTermsStatistics();
+    const statistics = await Promise.all(
+        term_statisic.map(p => {
+            return {
+                term: p.name,
+                class: p.classification,
+                tfidf: p.tfidf,
+            }
+        })
+    );
+    positiveClassTfidf = statistics.filter(doc => doc.class === 1);
+    negativeClassTfidf = statistics.filter(doc => doc.class === 0);
+
+    //3 tfidf do token igual ao que tiver na bd / sum tfidf de kbest da classa respetiva
+
+
+    //4 correr para todos os tokens do texto que estejam na tabela term_statistics
+    //5 multiplicar o valor de 3 de todos, e multiplicar por p(w)
+
+    //6 fazer isto para classe positiva e negativa, e o valor mais elevado é a classe estimada
+
+
+    
 }
 
 
