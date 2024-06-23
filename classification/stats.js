@@ -7,10 +7,10 @@ const start = args.start ? parseInt(args.start, 10) : null;
 const end = args.end ? parseInt(args.end, 10) : null;
 
 const { getTestingSet } = require("../database/repositories/trainAndTestingSets");
-const { cossineSimilarityResult } = require("../classification/classifier.js");
+const { cossineSimilarityResult, probabilisticClassification } = require("../classification/classifier.js");
 
 
-async function getStats() {
+async function getStats(method) {
     let testingSet = await getTestingSet();
     testingSet = testingSet.slice(190,210)
     // Slice the array if start and end parameters are provided
@@ -20,14 +20,27 @@ async function getStats() {
     
 
     // Transformar a estrutura dos dados
-    let predictions = await Promise.all(testingSet.map(async (item) => {
-        const result = await cossineSimilarityResult(item.review_text);
-        return {
-            document: item.review_text,
-            real: item.class,
-            predicted: result['decision']
-        };
-    }));
+    let predictions;
+    if(method === "cossine"){
+        predictions = await Promise.all(testingSet.map(async (item) => {
+            const result = await cossineSimilarityResult(item.review_text);
+            return {
+                document: item.review_text,
+                real: item.class,
+                predicted: result['decision']
+            };
+        }));
+    }
+    else if(method === "bayes"){
+        predictions = await Promise.all(testingSet.map(async (item) => {
+            const result = await probabilisticClassification(item.review_text);
+            return {
+                document: item.review_text,
+                real: item.class,
+                predicted: result['decision']
+            };
+        }));
+    }
 
     const cm = confusionMatrix(predictions);
     
