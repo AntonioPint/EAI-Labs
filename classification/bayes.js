@@ -29,7 +29,6 @@ async function classProbability(classe){
         // Calculate the prior probability P(ω)
         const classProbability = classCount / totalNumberDocuments;
 
-        console.log(classProbability)
         return classProbability;
     } catch (error) {
         console.error("Error calculating class probability:", error);

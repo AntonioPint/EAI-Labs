@@ -4,9 +4,6 @@ const termRepository = require("../database/repositories/termRepository.js");
 const termStatisticRepository = require("../database/repositories/termStatisticRepository.js");
 const bayes = require("./bayes.js");
 
-const PositiveApriori = bayes.classProbability(1);
-const NegativeApriori = bayes.classProbability(0);
-
 
 // Default initialization of cache
 const cache = {
@@ -108,39 +105,58 @@ function cosineSimilarity(vector1, vector2) {
     return similarity;
 }
 
+
+
+// const bayesCache = {
+//     PositiveApriori: null,
+//     NegativeApriori: null,
+//     populated: false
+// }
+
 async function probabilisticClassification(texto){
 
+    // if(!bayesCache.populated){
+        const PositiveApriori = await bayes.classProbability(1)
+        const NegativeApriori = await bayes.classProbability(0)
 
-    //1 get words from texto
-    //2  clean, until tokens
+    //     bayesCache.populated = true
+    // }
+
+
+
+    // get words from texto and clean, until tokens
     let preProcessed = preprocessing(texto, [1, 2])
     preProcessed.tf = preProcessed.tokens.map(tokensNgram =>
         tokensNgram.map(token => counting.tf(tokensNgram, token))
     );
     preProcessed.tokens = [].concat(...preProcessed.tokens)
-    preProcessed.tf = [].concat(...preProcessed.tf)
-    preProcessed.tfidfPositive = []
-    preProcessed.tfidfNegative = []
+    preProcessed.bayesPositive = []
+    preProcessed.bayesNegative = []
 
-    let [termsOriginalNegative, termsOriginalPositive, termsStatistics] = await Promise.all([
-        termRepository.getIdfOfTerms(0),
-        termRepository.getIdfOfTerms(1),
-        termStatisticRepository.getTermStatisticsFormated()
-    ]);
-    
+    // obter soma das classes 
+    const tfIdfClassSums = await termRepository.getTermTfidfSum()
+    const termsTfIdf = await termRepository.getTermsTfidf(preProcessed.tokens)
 
-    term_statisic = termStatisticRepository.getAllTermsStatistics();
-    const statistics = await Promise.all(
-        term_statisic.map(p => {
-            return {
-                term: p.name,
-                class: p.classification,
-                tfidf: p.tfidf,
-            }
-        })
-    );
-    positiveClassTfidf = statistics.filter(doc => doc.class === 1);
-    negativeClassTfidf = statistics.filter(doc => doc.class === 0);
+    let finalValuePositive = 1;
+    let finalValueNegative = 1;
+
+    termsTfIdf.forEach(classData => {
+        finalValuePositive *= (classData.positiveTfIdf / tfIdfClassSums.get(1))
+        finalValueNegative *= (classData.negativeTfIdf / tfIdfClassSums.get(0))
+    });
+    finalValueNegative *= NegativeApriori
+    finalValuePositive *= PositiveApriori
+
+
+    let decision = +(finalValuePositive > finalValueNegative);
+    return {
+        decision: decision,
+        naiveBayes: [finalValuePositive, finalValueNegative]
+    };
+
+
+  //can also be made using the term table but will have to calculate the tfidf of all terms for a specific class, maybe something that could be saved in the database?
+  //will also have to calculate the sum of tfidf of the term in all  
 
     //3 tfidf do token igual ao que tiver na bd / sum tfidf de kbest da classa respetiva
 
@@ -150,11 +166,12 @@ async function probabilisticClassification(texto){
 
     //6 fazer isto para classe positiva e negativa, e o valor mais elevado é a classe estimada
 
-
+    //para cada termo do texto pegar no tfidf dividir pela soma de todos os tfidf dessa classe
     
 }
 
 
 module.exports = {
-    cossineSimilarityResult: cossineSimilarityResult
+    cossineSimilarityResult: cossineSimilarityResult,
+    probabilisticClassification: probabilisticClassification
 };
