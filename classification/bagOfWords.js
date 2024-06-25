@@ -200,7 +200,7 @@ function avgVector(termsArray) {
     return avgVectors
 }
 
-function removeOutliersByMinOccurrences(termsArray, minOccurrences = 3) {
+function removeOutliersByMinOccurrences(termsArray, minOccurrences = 0) {
 
     return termsArray.filter(e => {return  e.occurrences >= minOccurrences});
 }

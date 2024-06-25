@@ -272,7 +272,7 @@ router.post('/classify', async function( req, res, next){
 })
 
 router.post('/matrix', async function( req, res, next){
-  getStats().then( e=> {
+  getStats("cossine").then( e=> {
     res.send(e)
   })
 })
