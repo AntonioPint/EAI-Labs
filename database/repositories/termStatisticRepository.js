@@ -76,7 +76,7 @@ function getTermStatisticsFormated() {
 
 function getTermStatisticTfidfSum(){
     return new Promise((resolve, reject) => {
-        connection.query("select classification, sum(ts.tfidf) as `tfidf` from term_statistic ts group by ts.classification;", function (err, rows, fields) {
+        connection.query("select classification, sum(ts.occurrences) as `tfidf` from term_statistic ts group by ts.classification;", function (err, rows, fields) {
             if (err) {
                 reject(err);
                 return;

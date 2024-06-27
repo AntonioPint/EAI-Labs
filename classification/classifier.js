@@ -113,11 +113,11 @@ function cosineSimilarity(vector1, vector2) {
 //     populated: false
 // }
 
-async function probabilisticClassification(texto){
+async function probabilisticClassification(texto) {
 
     // if(!bayesCache.populated){
-        const PositiveApriori = await bayes.classProbability(1)
-        const NegativeApriori = await bayes.classProbability(0)
+    const PositiveApriori = await bayes.classProbability(1)
+    const NegativeApriori = await bayes.classProbability(0)
 
     //     bayesCache.populated = true
     // }
@@ -139,12 +139,16 @@ async function probabilisticClassification(texto){
     let finalValueNegative = 1;
 
     termsTfIdf.forEach(term => {
-        finalValuePositive *= ((term.positiveTfIdf + 1) / tfIdfClassSums.get(1))
-        finalValueNegative *= ((term.negativeTfIdf + 1) / tfIdfClassSums.get(0))
+        if (term.positiveTfIdf != 0) {
+            finalValuePositive *= ((term.positiveTfIdf) * tfIdfClassSums.get(1))
+        }
+        if (term.negativeTfIdf != 0) {
+            finalValueNegative *= ((term.negativeTfIdf) * tfIdfClassSums.get(0))
+        }
     });
-    finalValueNegative *= NegativeApriori
-    finalValuePositive *= PositiveApriori
 
+    finalValuePositive *= PositiveApriori
+    finalValueNegative *= NegativeApriori
 
     let decision = +(finalValuePositive > finalValueNegative);
     return {
@@ -152,20 +156,6 @@ async function probabilisticClassification(texto){
         naiveBayes: [finalValuePositive, finalValueNegative]
     };
 
-
-  //can also be made using the term table but will have to calculate the tfidf of all terms for a specific class, maybe something that could be saved in the database?
-  //will also have to calculate the sum of tfidf of the term in all  
-
-    //3 tfidf do token igual ao que tiver na bd / sum tfidf de kbest da classa respetiva
-
-
-    //4 correr para todos os tokens do texto que estejam na tabela term_statistics
-    //5 multiplicar o valor de 3 de todos, e multiplicar por p(w)
-
-    //6 fazer isto para classe positiva e negativa, e o valor mais elevado é a classe estimada
-
-    //para cada termo do texto pegar no tfidf dividir pela soma de todos os tfidf dessa classe
-    
 }
 
 
