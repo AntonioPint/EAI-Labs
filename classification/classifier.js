@@ -107,22 +107,11 @@ function cosineSimilarity(vector1, vector2) {
 
 
 
-// const bayesCache = {
-//     PositiveApriori: null,
-//     NegativeApriori: null,
-//     populated: false
-// }
-
 async function probabilisticClassification(texto) {
 
-    // if(!bayesCache.populated){
+
     const PositiveApriori = await bayes.classProbability(1)
     const NegativeApriori = await bayes.classProbability(0)
-
-    //     bayesCache.populated = true
-    // }
-
-
 
     // get words from texto and clean, until tokens
     let preProcessed = preprocessing(texto, [1, 2])

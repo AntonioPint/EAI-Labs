@@ -68,12 +68,6 @@ async function processTerms() {
 
     })
 
-    // const bagOfWords = ["room", "small", "messy", "breakfast", "very", "good", "few", "choices"];
-    // const documents = [
-    //     ["room", "small", "messy"],
-    //     ["breakfast", "very", "good"],
-    //     ["breakfast", "very", "few", "choices"],
-    // ];
 
     console.log("GENERATING TERM"); await termRepository.truncateTable()
 
@@ -97,15 +91,6 @@ async function processTerms() {
 
     console.log("FINISHED GENERATING TERM");
 
-    // const content = JSON.stringify(resolvedResults);
-    // fs.writeFile('./classification/preprocessing_tf2.json', content, err => {
-    //     if (err) {
-    //         console.error(err);
-    //     } else {
-    //         // file written successfully
-    //         console.log("Done Writting")
-    //     }
-    // });
 }
 
 
