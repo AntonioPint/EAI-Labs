@@ -133,7 +133,7 @@ document.getElementById('classifierForm2').addEventListener('submit', function (
         classifierResult.textContent = "Positive";
         classifierResult.style.color = "green";
       }
-      similarityValues.textContent = `Similarity values: ${result.naiveBayes.join(', ')}`;
+      similarityValues.textContent = `Values of the products of probabilities: ${result.naiveBayes.join(', ')}`;
     })
     .catch(error => {
       console.error('Error:', error);
