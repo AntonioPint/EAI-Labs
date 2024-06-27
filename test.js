@@ -10,7 +10,6 @@ const termStatisticRepository = require("./database/repositories/termStatisticRe
 
 (async ()=>{
 
-  console.log(hasCache())
 
   let [termsOriginalNegative, termsOriginalPositive, termsStatistics] = await Promise.all([
     termRepository.getIdfOfTerms(0),
@@ -31,7 +30,6 @@ const termStatisticRepository = require("./database/repositories/termStatisticRe
         !!myCache.get("termsStatistics")
   }
   
-  console.log(hasCache())
   
 
 

@@ -12,7 +12,6 @@ const { cossineSimilarityResult, probabilisticClassification } = require("../cla
 
 async function getStats(method) {
     let testingSet = await getTestingSet();
-    testingSet = testingSet.slice(190,210)
     // Slice the array if start and end parameters are provided
     if (start !== null && end !== null) {
         testingSet = testingSet.slice(start, end);
@@ -40,6 +39,8 @@ async function getStats(method) {
                 predicted: result['decision']
             };
         }));
+    }else{
+        throw "Um método de classificação tem de ser escolhido 'cossine' ou 'bayes'"
     }
 
     const cm = confusionMatrix(predictions);

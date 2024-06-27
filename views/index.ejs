@@ -1,114 +1,98 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-    <link rel="stylesheet" href="/stylesheets/index.css" />
-  </head>
 
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="/stylesheets/index.css" />
+</head>
 
-    <div id="divOptions">
-      <div id="selects">
-        <h2>Selects</h2>
-        <form id="reviewForm" method="get" action="/reviewFood/:id">
-          <label for="reviewInputValue">GET /reviewFood/:id</label>
-          <input type="text" id="reviewInputValue" placeholder="Enter value" />
-          <input type="submit" value="Submit" />
-        </form>
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <p>Welcome to <%= title %>
+  </p>
 
-        <form id="positiveReviewsForm" method="get" action="positiveReviews">
-          <label for="positiveReviewInputValue"
-            >GET /positiveReviews/:limit</label
-          >
-          <input
-            type="text"
-            id="positiveReviewInputValue"
-            placeholder="Enter value"
-          />
-          <input type="submit" value="Submit" />
-        </form>
+  <div id="divOptions">
+    <div id="selects">
+      <h2>Selects</h2>
+      <form id="reviewForm" method="get" action="/reviewFood/:id">
+        <label for="reviewInputValue">GET /reviewFood/:id</label>
+        <input type="text" id="reviewInputValue" placeholder="Enter value" />
+        <input type="submit" value="Submit" />
+      </form>
 
-        <form id="negativeReviewsForm" method="get" action="negativeReviews">
-          <label for="negativeReviewInputValue"
-            >GET /negativeReviews/:limit</label
-          >
-          <input
-            type="text"
-            id="negativeReviewInputValue"
-            placeholder="Enter value"
-          />
-          <input type="submit" value="Submit" />
-        </form>
-      </div>
-      <div id="process">
-        <h2>Process</h2>
+      <form id="positiveReviewsForm" method="get" action="positiveReviews">
+        <label for="positiveReviewInputValue">GET /positiveReviews/:limit</label>
+        <input type="text" id="positiveReviewInputValue" placeholder="Enter value" />
+        <input type="submit" value="Submit" />
+      </form>
 
-        <form method="get" action="processTerms">
-          <label for="processSubmit">
-            Process all Terms into BD. Already stored: <%= nTerms %></label
-          >
-          <input type="submit" id="processSubmit" value="Submit" />
-        </form>
+      <form id="negativeReviewsForm" method="get" action="negativeReviews">
+        <label for="negativeReviewInputValue">GET /negativeReviews/:limit</label>
+        <input type="text" id="negativeReviewInputValue" placeholder="Enter value" />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+    <div id="process">
+      <h2>Process</h2>
 
-        <form method="get" action="processTermStatistics">
-          <label for="processSubmit2">
-            Process all Terms Statistics into BD. Already stored: <%=
-            nTermsStatistic %></label
-          >
-          <input type="submit" id="processSubmit2" value="Submit" />
-        </form>
-      </div>
-      <div id="classifier">
-        <h2>Class Identifier</h2>
-        <form id="classifierForm" method="post" action="classify">
-          <label for="textToclassify">Phrase Classification</label>
-          <input
-            type="text"
-            id="textToclassify"
-            name="phrase"
-            placeholder="Enter a phrase"
-          />
-          <input type="submit" id="processSubmit" value="Submit" />
-        </form>
+      <form method="get" action="processTerms">
+        <label for="processSubmit">
+          Process all Terms into BD. Already stored: <%= nTerms %></label>
+        <input type="submit" id="processSubmit" value="Submit" />
+      </form>
 
-        <div>
-          <h3>Result</h3>
-          <span id="classifierResult"></span>
-          <div id="similarityValues"></div>
-        </div>
-      </div>
+      <form method="get" action="processTermStatistics">
+        <label for="processSubmit2">
+          Process all Terms Statistics into BD. Already stored: <%= nTermsStatistic %></label>
+        <input type="submit" id="processSubmit2" value="Submit" />
+      </form>
+    </div>
+    <div id="classifier">
+      <h2>Class Identifier</h2>
+      <form id="classifierForm" method="post" action="classify">
+        <label for="textToclassify">Phrase Classification</label>
+        <input type="text" id="textToclassify" name="phrase" placeholder="Enter a phrase" />
+        <input type="submit" id="processSubmit" value="Submit" />
+      </form>
 
       <div>
-        <h2>Matriz de confusão</h2> 
-        <form id="form-matrix" action="/matrix" method="post">
-            <button type="submit">Generate</button>
-        </form>
-        <div id="table-matrix" style="display: none;" >
-          <table>
-            <th style="visibility: hidden"></th>
-            <th>Predicted Positive</th>
-            <th>Predicted Negative</th>
-            <tr>
-                <th>Actual Positive</th>
-                <td class="tp">True Positive (TP)
-                  <div id="tpResult">placeholder</div>
-                </td>
-                <td class="fn">False Negative (FN)
-                  <div id="fnResult">placeholder</div>
-                </td>
-            </tr>
-            <tr>
-                <th>Actual Negative</th>
-                <td class="fp">False Positive (FP)
-                  <div id="fpResult">placeholder</div>
-                </td>
-                <td class="tn">True Negative (TN)
-                  <div id="tnResult">placeholder</div>
-                </td>
-            </tr>
+        <h3>Result</h3>
+        <span id="classifierResult"></span>
+        <div id="similarityValues"></div>
+      </div>
+
+      <h2>Matriz de confusão</h2>
+      <form id="form-matrix" action="/matrix" method="post">
+        <button type="submit">Generate</button>
+      </form>
+      <div id="table-matrix" style="display: none;">
+        <table>
+          <th style="visibility: hidden"></th>
+          <th>Predicted Positive</th>
+          <th>Predicted Negative</th>
+          <tr>
+            <th>Actual Positive</th>
+            <td class="tp">True Positive (TP)
+              <div id="tpResult">placeholder</div>
+            </td>
+            <td class="fn">False Negative (FN)
+              <div id="fnResult">placeholder</div>
+            </td>
+          </tr>
+          <tr>
+            <th>Actual Negative</th>
+            <td class="fp">False Positive (FP)
+              <div id="fpResult">placeholder</div>
+            </td>
+            <td class="tn">True Negative (TN)
+              <div id="tnResult">placeholder</div>
+            </td>
+          </tr>
         </table>
         <div>
           <h2>Metricas</h2>
@@ -116,15 +100,65 @@
           <h5 id="rec">Rec: </h5>
           <h5 id="f1">F1:</h5>
         </div>
-        </div>
       </div>
     </div>
 
-    
+    <div id="classifier2">
+      <h2>Class Identifier</h2>
+      <form id="classifierForm2" method="post" action="classify2">
+        <label for="textToclassify">Phrase Classification</label>
+        <input type="text" id="textToclassify2" name="phrase" placeholder="Enter a phrase" />
+        <input type="submit" id="processSubmit2" value="Submit" />
+      </form>
 
-    <a href="/api-docs">
-      <img id="swaggerLink" src="/images/Swagger-logo.png" />
-    </a>
-  </body>
-  <script src="/javascripts/index.js" defer></script>
+      <div>
+        <h3>Result</h3>
+        <span id="classifierResult2"></span>
+        <div id="similarityValues2"></div>
+      </div>
+
+      <h2>Matriz de confusão</h2>
+      <form id="form-matrix2" action="/matrix2" method="post">
+        <button type="submit">Generate</button>
+      </form>
+      <div id="table-matrix2" style="display: none;">
+        <table>
+          <th style="visibility: hidden"></th>
+          <th>Predicted Positive</th>
+          <th>Predicted Negative</th>
+          <tr>
+            <th>Actual Positive</th>
+            <td class="tp">True Positive (TP)
+              <div id="tpResult2">placeholder</div>
+            </td>
+            <td class="fn">False Negative (FN)
+              <div id="fnResult2">placeholder</div>
+            </td>
+          </tr>
+          <tr>
+            <th>Actual Negative</th>
+            <td class="fp">False Positive (FP)
+              <div id="fpResult2">placeholder</div>
+            </td>
+            <td class="tn">True Negative (TN)
+              <div id="tnResult2">placeholder</div>
+            </td>
+          </tr>
+        </table>
+        <div>
+          <h2>Metricas</h2>
+          <h5 id="prec2">Prec: </h5>
+          <h5 id="rec2">Rec: </h5>
+          <h5 id="f1_2">F1:</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="/api-docs">
+    <img id="swaggerLink" src="/images/Swagger-logo.png" />
+  </a>
+</body>
+<script src="/javascripts/index.js" defer></script>
+
 </html>

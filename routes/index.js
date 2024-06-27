@@ -5,7 +5,7 @@ var hotelReviews = require("../database/repositories/hotelReviewRepository.js");
 const termRepository = require("../database/repositories/termRepository.js");
 const termStatisticRepository = require("../database/repositories/termStatisticRepository.js");
 var train = require("../classification/train.js");
-const { cossineSimilarityResult } = require("../classification/classifier.js");
+const { cossineSimilarityResult, probabilisticClassification } = require("../classification/classifier.js");
 const { getStats } = require("../classification/stats.js")
 
 let isProcessing = false;
@@ -187,7 +187,7 @@ router.get("/processTerms", async function (req, res, next) {
                   window.location.href = '/doneProcessing';
                 }
               });
-          }, 60000);
+          }, 5000);
         </script>
       </head>
       <body>
@@ -229,7 +229,7 @@ router.get("/processTermStatistics", async function (req, res, next) {
                   window.location.href = '/doneProcessing';
                 }
               });
-          }, 60000);
+          }, 5000);
         </script>
       </head>
       <body>
@@ -252,6 +252,7 @@ router.get('/checkProcessingStatus', function (req, res, next) {
   res.json({ isProcessingDone });
 });
 
+
 /**
  * @swagger
  * /doneProcessing:
@@ -265,16 +266,101 @@ router.get('/doneProcessing', function (req, res, next) {
   res.send('Processing is complete! <a href="/">Go back</a>');
 });
 
+/**
+ * @swagger
+ * /classify:
+ *   post:
+ *     summary: Classify a phrase using cosine similarity
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               phrase:
+ *                 type: string
+ *                 example: "This is a sample phrase."
+ *     responses:
+ *       200:
+ *         description: Classification result
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 router.post('/classify', async function( req, res, next){
   cossineSimilarityResult(req.body.phrase).then( e=> {
     res.send(e)
   })
 })
 
+/**
+ * @swagger
+ * /matrix:
+ *   post:
+ *     summary: Get statistics for probabilistic classification
+ *     responses:
+ *       200:
+ *         description: Probabilistic classification statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 router.post('/matrix', async function( req, res, next){
   getStats("cossine").then( e=> {
     res.send(e)
   })
 })
+
+/**
+ * @swagger
+ * /classify2:
+ *   post:
+ *     summary: Classify a phrase using probabilistic classification
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               phrase:
+ *                 type: string
+ *                 example: "This is a sample phrase."
+ *     responses:
+ *       200:
+ *         description: Classification result
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
+router.post('/classify2', async function( req, res, next){
+  probabilisticClassification(req.body.phrase).then( e=> {
+    res.send(e)
+  })
+})
+
+/**
+ * @swagger
+ * /matrix2:
+ *   post:
+ *     summary: Get statistics for probabilistic classification
+ *     responses:
+ *       200:
+ *         description: Probabilistic classification statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
+router.post('/matrix2', async function( req, res, next){
+  getStats("bayes").then( e=> {
+    res.send(e)
+  })
+})
+
 
 module.exports = router;

@@ -27,6 +27,7 @@ async function processTerms() {
         return { class: element.class, ...preProcessed, docId: element.id }
     });
 
+
     //Essencial para conter apenas tokens quando arrayLength > 0
     preprocessedTraining = preprocessedTraining.filter(e => {
         return (e.tokens[0].length > 0 && e.tokens[1].length > 0)
@@ -74,7 +75,7 @@ async function processTerms() {
     //     ["breakfast", "very", "few", "choices"],
     // ];
 
-    console.log("GENERATING TERM"); await termRepository.truncateTable()
+    // console.log("GENERATING TERM"); await termRepository.truncateTable()
 
     async function insertTermData(termData){
         console.log("INSERTING TERM_DATA");
@@ -88,10 +89,10 @@ async function processTerms() {
     await insertTermData(termData)
     termData = await Term.createTermData(semiDatasets.unigramNegatives, semiDatasets.documentsUnigram.negatives.data, 0, semiDatasets.documentsUnigram.negatives.docIds);
     await insertTermData(termData)
-    termData = await Term.createTermData(semiDatasets.bigramPositives, semiDatasets.documentsBigram.positives.data, 1, semiDatasets.documentsBigram.positives.docIds);
-    await insertTermData(termData)
-    termData = await Term.createTermData(semiDatasets.bigramNegatives, semiDatasets.documentsBigram.negatives.data, 0, semiDatasets.documentsBigram.negatives.docIds);
-    await insertTermData(termData)
+    // termData = await Term.createTermData(semiDatasets.bigramPositives, semiDatasets.documentsBigram.positives.data, 1, semiDatasets.documentsBigram.positives.docIds);
+    // await insertTermData(termData)
+    // termData = await Term.createTermData(semiDatasets.bigramNegatives, semiDatasets.documentsBigram.negatives.data, 0, semiDatasets.documentsBigram.negatives.docIds);
+    // await insertTermData(termData)
     delete termData;
 
     console.log("FINISHED GENERATING TERM");
@@ -115,8 +116,6 @@ async function processTermStatistics() {
         await termRepository.getAllTermsWithFilters(1, 1),
         await termRepository.getAllTermsWithFilters(1, 2)
     ]
-
-    // resolvedResults[0] = resolvedResults[0].slice(0,5) 
 
     console.log("GENERATING TERM STATISTIC"); await termStatisticRepository.truncateTable()
 
