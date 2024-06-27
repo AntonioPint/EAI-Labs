@@ -93,9 +93,9 @@ document.getElementById('form-matrix').addEventListener('submit', function (even
       document.getElementById("fpResult").innerText = result.matrix[1][0];
       document.getElementById("tnResult").innerText = result.matrix[1][1];
 
-      document.getElementById("prec").innerText += result.prec;
-      document.getElementById("rec").innerText += result.rec;
-      document.getElementById("f1").innerText += result.f1;
+      document.getElementById("prec").innerText = result.prec;
+      document.getElementById("rec").innerText = result.rec;
+      document.getElementById("f1").innerText = result.f1;
 
       document.getElementById("table-matrix").style.display = "";
       document.getElementById("form-matrix").style.display = "none";
@@ -158,9 +158,9 @@ document.getElementById('form-matrix2').addEventListener('submit', function (eve
       document.getElementById("fpResult2").innerText = result.matrix[1][0];
       document.getElementById("tnResult2").innerText = result.matrix[1][1];
 
-      document.getElementById("prec2").innerText += result.prec;
-      document.getElementById("rec2").innerText += result.rec;
-      document.getElementById("f1_2").innerText += result.f1;
+      document.getElementById("prec2").innerText = result.prec;
+      document.getElementById("rec2").innerText = result.rec;
+      document.getElementById("f1_2").innerText = result.f1;
 
       document.getElementById("table-matrix2").style.display = "";
       document.getElementById("form-matrix2").style.display = "none";
