@@ -116,7 +116,7 @@ O segundo dos nossos dois algoritmos de classificação, segue o principio de ut
 
 ![Naive Bayes section with both tested phrase and generated confusion matrix](images/region4-after.png)
 
-### 5. Swagger
+### 4. Swagger
 [Docs](https://swagger.io/docs/)
 
 # Anexos <a name="4"></a>
