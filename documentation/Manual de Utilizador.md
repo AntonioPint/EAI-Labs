@@ -98,7 +98,7 @@ Nesta secção inicialmente temos só um botão para gerar os nossos testes, est
 ![Cossine Similarity section with generated confusion matrix](images/region3-matrix.png)
 
 
-### 5. Swagger
+### 4. Swagger
 [Docs](https://swagger.io/docs/)
 
 # Anexos <a name="4"></a>
