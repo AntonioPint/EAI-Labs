@@ -49,11 +49,10 @@ Para inicializar inicializar o a aplicação correr:
 EAI-Labs$ npm start
 ```
 ## Estrutura da aplicação web:
-A aplicação funciona maioritáriamente numa única página
+A aplicação funciona maioritáriamente numa única página Composta por um titulo e 3 regiões principais distintas (enumeradas na image seguinte)
 
 ![alt text](images/fullPage.png)
 
-Composta por um titulo e 5 regiões distintas (enumeradas na image)
 ### 1. Selects - Selecionar dados do nosso dataset
 
 ![alt text](images/region1.png)
@@ -66,7 +65,7 @@ Existem 3 alineas nesta região:
 - GET /negativeReviews/:limit -> Endpoint semelante ao anterior, mas para reviews negativas (Score de 1 ou 2).
 
 ### 2. Process
-Esta região da aplicação é desaconcelhável mexer, uma vez que qualquer um destes processos é inicializado íra demorar uma quantidade de tempo considerável.
+**Esta região da aplicação é desaconcelhável, como tal esta funcionalidade está desativada, uma vez que quando qualquer um destes processos é inicializado íra demorar uma quantidade de tempo considerável. Para alem de que não precisão de ser executados com regularmente.**
 
 ![alt text](images/region2.png)
 
@@ -77,15 +76,17 @@ Nesta região temos dois botões:
 
 Podemos ver nesta região a quantidade de entradas criadas na nossa tabela de termos, sendo cada entrada a presença de um termo num documento; podemos também ver o numero de entradas na nossa table de estatisticas dos termos onde estão os nossos melhores termos agregados.
 
-### 3. Class Identifier - Similaridade de Cosseno
-O primeiro dos nossos dois algoritmos de classificação, podemos testar frases/reviews originais, ou ver os resultados dos testes do nosso classificador.
+### 3. Class Identifiers
+Temos duas secções semelhantes nesta região, funcionam de forma identica apenas aplicam algoritmos de classificação diferentes. O nome do algoritmo respetivo encontra-se no titulo da região, sendo estes, Similaridade de Cosseno e Naive Bayes.
+
+Na "caixa" de cada secção temos dois elementos o classificador de frases e o gerador da nossa matriz de confusão.
 
 ![Cossine Similarity section in it's inicial state](images/region3-before.png)
 
 #### Secção 1 - Testar Frases/Reviews originais
 Nesta secção o utilizador pode testar uma review de comida original para ver se é identificada com positiva ou negativa.
 É só escrever uma frase na textbox e clickar no botão de submit ao lado.
-O resultado será a resposta se é classificado como Positivo ou Negativo e os valores ponderados (Similarity values) respetivos a cada Classe (por ordem Positiva e Negativa) onde podemos observar que o valor mais elevado é aquele que determina a classe estimada da frase.
+O resultado será a resposta se é classificado como Positivo ou Negativo e os valores ponderados (Similarity values ou Product of Probabilities) respetivos a cada Classe (por ordem Positiva e Negativa).
 
 ![Cossine Similarity single phrase classification](images/region3-phrase.png)
 
@@ -96,17 +97,9 @@ Nesta secção inicialmente temos só um botão para gerar os nossos testes, est
 
 ![Cossine Similarity section with generated confusion matrix](images/region3-matrix.png)
 
-### 4. Class Identifier - Naive Bayes
-O segundo dos nossos dois algoritmos de classificação, segue o principio de utilização semelhante ao primeiro
-
-
-#### Before and after
-![Naive Bayes section before generating confusion matrix](images/region4-before.png)
-
-![Naive Bayes section with both tested phrase and generated confusion matrix](images/region4-after.png)
-
 
 ### 5. Swagger
+[Docs](https://swagger.io/docs/)
 
 # Anexos <a name="4"></a>
 
@@ -114,8 +107,26 @@ O segundo dos nossos dois algoritmos de classificação, segue o principio de ut
 ### Matriz de confusão
 
 ### Metricas
-#### Prec - 
+#### Prec - Precision
+Precision é uma métrica que indica o quão preciso o modelo está de acordo com os que foram previstos
+positivamente, quantos deles é que são de facto positivos. É uma boa medida para determinar quando os
+custos de Falso Positivo são altos.
+\[
+\text{Precision} = \frac{\text{Positivos Verdadeiros}}{\text{Positivos Verdadeiros} + \text{Falsos Positivos}}
+\]
+#### Rec - Recall
+Recall calcula quantos dos Positivos Verdadeiros são capturados quando estimamos como Positivos
+Verdadeiros. Neste caso o Recall é uma métrica que terá grande importância quando há um alto custo
+associado aos Falsos Negativos.
+Recall = Positivos Verdadeiros
 
-#### Rec - 
+\[
+\text{Recall} = \frac{\text{Positivos Verdadeiros}}{\text{Positivos Verdadeiros} + \text{Falsos Negativos}}
+\]
 
-#### F1 - 
+#### F1 - Score ou F-Measure
+É utilizada quando se pretende encontrar um equilíbrio entre o Precision e o Recall. 
+
+\[
+\text{F1 Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+\]
