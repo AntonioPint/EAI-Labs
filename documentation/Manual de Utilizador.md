@@ -17,7 +17,8 @@ Guilherme Malhado<br>
 
 # Introdução
 
-Uma aplicação web simples, maioritáriamente de página unica 
+Uma aplicação web simples, maioritáriamente de página unica. É um classificador de textos, mais em específico reviews de comida, tendo duas classes para as reviews, reviews Positivas e reviews Negativas.
+Feito usando Node.js com Express.js, e uma base de dados em mysql
 
 # Instalação
 
@@ -104,6 +105,8 @@ O segundo dos nossos dois algoritmos de classificação, segue o principio de ut
 
 ![Naive Bayes section with both tested phrase and generated confusion matrix](images/region4-after.png)
 
+
+### 5. Swagger
 
 # Anexos
 
