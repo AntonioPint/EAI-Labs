@@ -22,19 +22,18 @@ Feito usando Node.js com Express.js, e uma base de dados em mysql
 
 # Instalação
 
-## Requesitos:
-- Nodejs versão 20.14+
-- Mysql client versão 8
+## Requisitos:
+- Nodejs versão 18+
 
 ## Correr a aplicação pela primeira vez:
 1. Antes de correr o programa localmente criar um ficheiro .env usando o sample.env como base.
 2. Num terminal na diretoria da aplicação correr:
 ```bash
-EAI-Labs$ npm i
+npm i
 ```
 3. No mesmo terminal correr para inicializar a aplicação em localhost, correr:
 ```bash
-EAI-Labs$ npm start
+npm start
 ```
 
 # Guia de Utilização
@@ -77,9 +76,6 @@ O primeiro dos nossos dois algoritmos de classificação, podemos testar frases/
 
 ![Cossine Similarity section in it's inicial state](images/region3-before.png)
 
-#### Similaridade de Coseeno
-*// todo escrever uma pequena explicação do algoritmo e seu proposito*
-
 #### Secção 1 - Testar Frases/Reviews originais
 Nesta secção o utilizador pode testar uma review de comida original para ver se é identificada com positiva ou negativa.
 É só escrever uma frase na textbox e clickar no botão de submit ao lado.
@@ -97,8 +93,6 @@ Nesta secção inicialmente temos só um botão para gerar os nossos testes, est
 ### 4. Class Identifier - Naive Bayes
 O segundo dos nossos dois algoritmos de classificação, segue o principio de utilização semelhante ao primeiro
 
-#### Naive Bayes
-*// todo escrever uma pequena explicação do algoritmo e seu proposito*
 
 #### Before and after
 ![Naive Bayes section before generating confusion matrix](images/region4-before.png)
