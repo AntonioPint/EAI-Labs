@@ -89,10 +89,10 @@ async function processTerms() {
     await insertTermData(termData)
     termData = await Term.createTermData(semiDatasets.unigramNegatives, semiDatasets.documentsUnigram.negatives.data, 0, semiDatasets.documentsUnigram.negatives.docIds);
     await insertTermData(termData)
-    // termData = await Term.createTermData(semiDatasets.bigramPositives, semiDatasets.documentsBigram.positives.data, 1, semiDatasets.documentsBigram.positives.docIds);
-    // await insertTermData(termData)
-    // termData = await Term.createTermData(semiDatasets.bigramNegatives, semiDatasets.documentsBigram.negatives.data, 0, semiDatasets.documentsBigram.negatives.docIds);
-    // await insertTermData(termData)
+    termData = await Term.createTermData(semiDatasets.bigramPositives, semiDatasets.documentsBigram.positives.data, 1, semiDatasets.documentsBigram.positives.docIds);
+    await insertTermData(termData)
+    termData = await Term.createTermData(semiDatasets.bigramNegatives, semiDatasets.documentsBigram.negatives.data, 0, semiDatasets.documentsBigram.negatives.docIds);
+    await insertTermData(termData)
     delete termData;
 
     console.log("FINISHED GENERATING TERM");
