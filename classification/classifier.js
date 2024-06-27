@@ -126,9 +126,6 @@ async function probabilisticClassification(texto){
 
     // get words from texto and clean, until tokens
     let preProcessed = preprocessing(texto, [1, 2])
-    preProcessed.tf = preProcessed.tokens.map(tokensNgram =>
-        tokensNgram.map(token => counting.tf(tokensNgram, token))
-    );
     preProcessed.tokens = [].concat(...preProcessed.tokens)
     preProcessed.bayesPositive = []
     preProcessed.bayesNegative = []
@@ -141,9 +138,9 @@ async function probabilisticClassification(texto){
     let finalValuePositive = 1;
     let finalValueNegative = 1;
 
-    termsTfIdf.forEach(classData => {
-        finalValuePositive *= (classData.positiveTfIdf / tfIdfClassSums.get(1))
-        finalValueNegative *= (classData.negativeTfIdf / tfIdfClassSums.get(0))
+    termsTfIdf.forEach(term => {
+        finalValuePositive *= ((term.positiveTfIdf + 1) / tfIdfClassSums.get(1))
+        finalValueNegative *= ((term.negativeTfIdf + 1) / tfIdfClassSums.get(0))
     });
     finalValueNegative *= NegativeApriori
     finalValuePositive *= PositiveApriori

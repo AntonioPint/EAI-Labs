@@ -119,8 +119,8 @@ function getTermStatisticTfidf(tokens){
             tokens.forEach(token => {
                 idfMap.set(token, {
                     name: token,
-                    positiveTfIdf: 1, // Default value if no positive classification is found
-                    negativeTfIdf: 1  // Default value if no negative classification is found
+                    positiveTfIdf: 0, // Default value if no positive classification is found
+                    negativeTfIdf: 0  // Default value if no negative classification is found
                 });
             });
         
