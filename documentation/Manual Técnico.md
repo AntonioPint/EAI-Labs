@@ -8,6 +8,9 @@ António Carlos Ferreira Pinto<br>
 Diogo Costa<br>
 Guilherme Malhado<br>
 
+
+![alt text](images/ips.png)
+
 <div style="page-break-after: always;"></div>
 
 # Motivo
@@ -174,9 +177,166 @@ async function processTermStatistics() {
 }
 ```
 
+## Classificadores
+
+Os classificadores utilizados servem o propósito de classificar novos textos presentes no dataset de teste de modo a prever a classificação destes novos textos e medir a precisão dos modelos
+
+### TF-IDF
+
+O classificador TFIDF utiliza a média desta métrica (tfidf) para criar dois vetores de palavras positivas e dois de palavras negativas que serão combinados por classificação e servirão para calcular o mapa de identificação dos termos e posteriormente calcular a soma de valores. Este processo é efetuado tanto para a lista de classificação positiva como negativa, de modo a calcular a soma com maior valor. Deste modo o resultado da classificação final será a classificação com o máximo dos valores de classificação.
+
+Resultados para o tfidf:
+
+O classificador Naive Bayes com TF-IDF utiliza a frequência dos termos e a métrica TF-IDF para calcular probabilidades de classificação para termos positivos e negativos. Primeiro, os tokens são extraídos e suas frequências calculadas. Depois, somas de TF-IDF são obtidas para cada classe. As probabilidades para cada termo são normalizadas e multiplicadas pelas somas de classe, ajustadas pelas probabilidades a priori. A decisão final é baseada na comparação das probabilidades acumuladas para as classes positiva e negativa, retornando a classificação com o maior valor.
+
+| |Predicted Positive|Predicted Negative|
+|-|-|-|
+|Actual Positive|True Positive (TP) 92 |False Negative (FN) 108|
+|Actual Negative|False Positive (FP) 88 | True Negative (TN) 112 |
+
+Metricas
+Prec: 0.5111111111111111
+Rec: 0.46
+F1:0.4842105263157895
+
+### Naive-Bayes  
+
+| |Predicted Positive|Predicted Negative|
+|-|-|-|
+|Actual Positive|True Positive (TP) 72 |False Negative (FN) 128|
+|Actual Negative|False Positive (FP) 48 | True Negative (TN) 152 |
+
+Metricas
+Prec: 0.606
+Rec: 0.36036
+F1: 0.45045
 
 # Front-End
 
+Através do front end é possível comunicar com o back-end e fazer operações essenciais para o desenvolvimento do projeto. O front end foi feito utilizando a biblioteca ejs que facilita o processo de desenvolvimento.
+
+<div style="text-align:center"><img src="images/image.png" alt="drawing" width="700" /></div>
+
+
 # Back-End
 
+O back-end fornece rotas para pedidos de processamento como "process terms" e "process term statistics" de modo a popular as tabelas na base de dados. Este foi construido utilizando express e node usando a linguagem de programação javascript.
+
+As rotas disponibilizadas pelo back-end estão demonstradas no link de swagger /api-docs/
+
+![alt text](images/image-1.png)
+
 # Base de dados
+
+A base de dados escolhida para o projeto foi uma instância em MySql. Esta base de dados hospedada proporcionou uma pesistência nos dados para todos os desenvolvedores.
+De seguida mostra-se a constituição das tabelas utilizadas para o projeto.
+A primeira "food_review" é constituida pelos dados originais e a adição de um campo "FullReview" que combina o campo "Summary" com o campo "Text", a ser considerado no treino e teste do modelo de classificação.
+
+```mysql
+CREATE TABLE `food_review` (
+   `Id` int(11) NOT NULL,
+   `ProductId` varchar(255) DEFAULT NULL,
+   `UserId` varchar(255) DEFAULT NULL,
+   `ProfileName` varchar(255) DEFAULT NULL,
+   `HelpfulnessNumerator` int(11) DEFAULT NULL,
+   `HelpfulnessDenominator` int(11) DEFAULT NULL,
+   `Score` int(11) DEFAULT NULL,
+   `Time` bigint(20) DEFAULT NULL,
+   `Summary` text,
+   `Text` text,
+   `FullReview` text,
+   PRIMARY KEY (`Id`)
+ ) ENGINE=InnoDB DEFAULT CHARSET=latin1
+```
+
+A tabela "Term" é constituida pelos termos encontrados ao longo dos documentos considerados de treino de modo a fazer algumas análises estatísticas como o número de ocorrencias, valores tf, idf e tfidf.
+
+```mysql
+CREATE TABLE `term` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `name` varchar(50) NOT NULL,
+   `binary` tinyint(4) NOT NULL,
+   `occurrences` int(11) NOT NULL,
+   `tf` float NOT NULL,
+   `idf` double NOT NULL,
+   `tfidf` float NOT NULL,
+   `docId` int(11) NOT NULL,
+   `wordCount` int(11) NOT NULL,
+   `classification` int(11) NOT NULL,
+   PRIMARY KEY (`id`)
+ ) ENGINE=InnoDB AUTO_INCREMENT=130997 DEFAULT CHARSET=latin1
+```
+
+A tabela "term_statistic" fornece as informações dos termos agrupadas e já tratadas seguindo as funções Kbest, minOccurences ... para o efeito de classificação dos termos encontrados em fase de teste.
+
+```mysql
+CREATE TABLE `term_statistic` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `name` varchar(255) NOT NULL,
+   `binary` float NOT NULL,
+   `occurrences` float NOT NULL,
+   `tf` float NOT NULL,
+   `tfidf` float NOT NULL,
+   `docIds` text NOT NULL,
+   `classification` int(11) NOT NULL,
+   PRIMARY KEY (`id`)
+ ) ENGINE=InnoDB AUTO_INCREMENT=1366 DEFAULT CHARSET=latin1
+```
+
+A classe "termClass" fornece o contexto da classificação. Classes com o atributo "class" com valor 1 pertencem á classe Positiva e com valores a 0 pertencem á classe Negativa.
+
+```mysql
+CREATE TABLE `termClass` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `class` int(11) NOT NULL,
+   `description` varchar(255) NOT NULL,
+   PRIMARY KEY (`id`)
+ ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1
+```
+
+Tabela "training_set" permite fazer a seleção de textos de modo a que com um simples join à tabela food_review permita obter todos os documentos de treino
+
+```mysql
+CREATE TABLE `training_set` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `review_id` int(11) DEFAULT NULL,
+   `class` int(11) NOT NULL,
+   PRIMARY KEY (`id`),
+   KEY `review_id` (`review_id`),
+   CONSTRAINT `training_set_ibfk_1` FOREIGN KEY (`review_id`) REFERENCES `food_review` (`Id`)
+ ) ENGINE=InnoDB AUTO_INCREMENT=1824 DEFAULT CHARSET=latin1
+```
+
+Tabela "testing_set" permite fazer a seleção de textos de modo a que com um simples join à tabela food_review permita obter todos os documentos de teste
+
+
+```mysql
+CREATE TABLE `testing_set` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `review_id` int(11) DEFAULT NULL,
+   `class` int(11) NOT NULL,
+   PRIMARY KEY (`id`),
+   KEY `review_id` (`review_id`),
+   CONSTRAINT `testing_set_ibfk_1` FOREIGN KEY (`review_id`) REFERENCES `food_review` (`Id`)
+ ) ENGINE=InnoDB AUTO_INCREMENT=456 DEFAULT CHARSET=latin1
+```
+
+# Execução do código
+
+Para se executar o código é necessário algumas ferramentas, tais como editor de texto (VSCode), Node instalado (recomendado v18.14.2 ou superior).
+
+O primeiro passo é certificar-se que está na diretoria que contenha os ficheiros app.js e package.json
+Com os passos anteriores efetuados terá de correr o seguinte comando para instalar as dependências do projeto:
+
+```cmd
+> npm i
+```
+
+De seguida copiar o conteúdo do ficheiro sample.env para um novo ficheiro .env que irá conter as credenciais de base de dados com autorização para efetuar operações "Select". Por isso processamento de termos não estará disponível.
+
+Agora com os passos concluidos pode ser efetuado o script para iniciar o servidor na porta 6061 acessível através do url: http://localhost:6061
+
+Script para iniciar servidor:
+```cmd
+> npm run start
+```
