@@ -81,78 +81,6 @@ function getTermCount() {
     });
 }
 
-function getTermTfidfSum(){
-    return new Promise((resolve, reject) => {
-        connection.query("select classification, sum(t.tfidf) as `tfidf` from term t group by t.classification;", function (err, rows, fields) {
-            if (err) {
-                reject(err);
-                return;
-            }
-            let map = new Map()
-            rows.map((e) => {
-                map.set(e.classification, e.tfidf)
-            })
-            resolve(map);
-        });
-    });
-}
-
-
-function getTermsTfidf(tokens){
-    return new Promise((resolve, reject) => {
-        // Assume tokens are safely preprocessed and sanitized
-        // Prepare the token list for SQL usage
-        const tokenList = tokens.map(token => `'${token}'`).join(',');
-
-        // Construct the SQL query
-        const query = `
-            SELECT 
-                t.classification,
-                t.name as name,
-                SUM(t.tfidf) AS tfidf
-            FROM 
-                term t
-            WHERE 
-                t.name IN (${tokenList})
-            GROUP BY 
-                t.classification, t.name;
-        `;
-
-        connection.query(query, function (err, rows) {
-            if (err) {
-                reject(err);
-                return;
-            }
-            let idfMap = new Map();
-
-            // Initialize the map with default values
-            tokens.forEach(token => {
-                idfMap.set(token, {
-                    name: token,
-                    positiveTfIdf: 1, // Default value if no positive classification is found
-                    negativeTfIdf: 1  // Default value if no negative classification is found
-                });
-            });
-        
-            // Process each row to fill in the actual tfidf values
-            rows.forEach(row => {
-                let entry = idfMap.get(row.name);
-                if (row.classification === 0) {
-                    entry.negativeTfIdf = row.tfidf;
-                } else if (row.classification === 1) {
-                    entry.positiveTfIdf = row.tfidf;
-                }
-                idfMap.set(row.name, entry);
-            });
-        
-            // Convert the map to an array of values
-            let result = Array.from(idfMap.values());
-            resolve(result);
-        });
-    });
-}
-
-
 function insertTerm(term) {
     if (term == null) throw "Term must be provided";
 
@@ -202,6 +130,4 @@ module.exports = {
     getTermCount: getTermCount,
     truncateTable: truncateTable,
     getAllTermsWithFilters: getAllTermsWithFilters,
-    getTermTfidfSum: getTermTfidfSum,
-    getTermsTfidf: getTermsTfidf,
 }

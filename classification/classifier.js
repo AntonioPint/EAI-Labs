@@ -134,8 +134,9 @@ async function probabilisticClassification(texto){
     preProcessed.bayesNegative = []
 
     // obter soma das classes 
-    const tfIdfClassSums = await termRepository.getTermTfidfSum()
-    const termsTfIdf = await termRepository.getTermsTfidf(preProcessed.tokens)
+    const tfIdfClassSums = await termStatisticRepository.getTermStatisticTfidfSum()
+    const termsTfIdf = await termStatisticRepository.getTermStatisticTfidf(preProcessed.tokens)
+
 
     let finalValuePositive = 1;
     let finalValueNegative = 1;

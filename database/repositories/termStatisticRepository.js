@@ -74,6 +74,74 @@ function getTermStatisticsFormated() {
 
 }
 
+function getTermStatisticTfidfSum(){
+    return new Promise((resolve, reject) => {
+        connection.query("select classification, sum(ts.tfidf) as `tfidf` from term_statistic ts group by ts.classification;", function (err, rows, fields) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            let map = new Map()
+            rows.map((e) => {
+                map.set(e.classification, e.tfidf)
+            })
+            resolve(map);
+        });
+    });
+}
+
+function getTermStatisticTfidf(tokens){
+    return new Promise((resolve, reject) => {
+        // Assume tokens are safely preprocessed and sanitized
+        // Prepare the token list for SQL usage
+        const tokenList = tokens.map(token => `'${token}'`).join(',');
+
+        // Construct the SQL query
+        const query = `
+            SELECT 
+                ts.classification,
+                ts.name as name,
+                ts.tfidf AS tfidf
+            FROM 
+                term_statistic ts
+            WHERE 
+                ts.name IN (${tokenList})
+        `;
+
+        connection.query(query, function (err, rows) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            let idfMap = new Map();
+
+            // Initialize the map with default values
+            tokens.forEach(token => {
+                idfMap.set(token, {
+                    name: token,
+                    positiveTfIdf: 1, // Default value if no positive classification is found
+                    negativeTfIdf: 1  // Default value if no negative classification is found
+                });
+            });
+        
+            // Process each row to fill in the actual tfidf values
+            rows.forEach(row => {
+                let entry = idfMap.get(row.name);
+                if (row.classification === 0) {
+                    entry.negativeTfIdf = row.tfidf;
+                } else if (row.classification === 1) {
+                    entry.positiveTfIdf = row.tfidf;
+                }
+                idfMap.set(row.name, entry);
+            });
+        
+            // Convert the map to an array of values
+            let result = Array.from(idfMap.values());
+            resolve(result);
+        });
+    });
+}
+
 function insertTermStatistic(term) {
     if (term == null) throw "Term must be provided";
 
@@ -157,4 +225,6 @@ module.exports = {
     getTermStatisticCount: getTermStatisticCount,
     truncateTable: truncateTable,
     getTermStatisticsFormated: getTermStatisticsFormated,
+    getTermStatisticTfidfSum: getTermStatisticTfidfSum,
+    getTermStatisticTfidf: getTermStatisticTfidf,
 }
