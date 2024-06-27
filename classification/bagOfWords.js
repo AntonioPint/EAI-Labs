@@ -188,8 +188,8 @@ function avgVector(termsArray) {
     const avgVectors = Array.from(termGroups.values()).map(group => {
         return {
             name: group.name,
-            binary: group.binary / group.count,
-            occurrences: group.occurrences / group.count,
+            binary: 1,
+            occurrences: group.occurrences,
             tf: group.tf / group.count,
             tfidf: group.tfidf / group.count,
             docIds: group.docIds,
@@ -201,8 +201,20 @@ function avgVector(termsArray) {
 }
 
 function removeOutliersByMinOccurrences(termsArray, minOccurrences = 0) {
+    // Count occurrences of each word
+    const wordCount = {};
+    termsArray.forEach(item => {
+        if (wordCount[item.name]) {
+            wordCount[item.name]++;
+        } else {
+            wordCount[item.name] = 1;
+        }
+    });
 
-    return termsArray.filter(e => {return  e.occurrences >= minOccurrences});
+    // Filter data to retain only objects with words that appear at least 3 times
+    const filteredData = termsArray.filter(item => wordCount[item.name] >= minOccurrences);
+
+    return filteredData;
 }
 
 module.exports = {

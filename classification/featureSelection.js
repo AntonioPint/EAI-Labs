@@ -8,7 +8,7 @@ function selectKBest(termsArray, metric, useAverage = false, k=null) {
     if (k == null){
         k = Math.ceil(termsArray.length * .2)
     }
-
+    console.log("asadasd")
     if (useAverage) {
         result = bagOfWords.avgVector(termsArray)
     } else {
