@@ -43,13 +43,13 @@
       <form method="get" action="processTerms">
         <label for="processSubmit">
           Process all Terms into BD. Already stored: <%= nTerms %></label>
-        <input type="submit" id="processSubmit" value="Submit" />
+        <input type="submit" class="disabled" id="processSubmit" value="Submit" disabled />
       </form>
 
       <form method="get" action="processTermStatistics">
         <label for="processSubmit2">
           Process all Terms Statistics into BD. Already stored: <%= nTermsStatistic %></label>
-        <input type="submit" id="processSubmit2" value="Submit" />
+        <input type="submit" class="disabled" id="processSubmit2" value="Submit" disabled />
       </form>
     </div>
     <div id="classifier">
@@ -108,7 +108,7 @@
       <form id="classifierForm2" method="post" action="classify2">
         <label for="textToclassify">Phrase Classification</label>
         <input type="text" id="textToclassify2" name="phrase" placeholder="Enter a phrase" />
-        <input type="submit" id="processSubmit2" value="Submit" />
+        <input type="submit" id="processSubmit2" value="Submit"/>
       </form>
 
       <div>

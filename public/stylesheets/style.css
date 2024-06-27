@@ -6,3 +6,9 @@ body {
 a {
   color: #00B7FF;
 }
+
+.disabled{
+  opacity: 0.5;
+  background-color: gray !important;
+  cursor: not-allowed !important;
+}
