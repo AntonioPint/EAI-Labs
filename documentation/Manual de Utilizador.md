@@ -16,8 +16,16 @@ Guilherme Malhado<br>
 
 1. [Introdução](#1)
 2. [Instalação](#2)
+2.1 [Requesitos](#2.1)
+2.2 [Correr a aplicação pela primeira vez:](#2.2)
 3. [Guia de Utilização](#3)
+3.1 [Estrutura da aplicação web:](#3.1)
+3.1.1 [Selects - Selecionar dados do nosso dataset](#3.1.1)
+3.1.2 [Process](#3.1.2)
+3.1.3 [Class Identifiers](#3.1.3)
+3.1.4 [Selects - Selecionar dados do nosso dataset](#3.1.4)
 4. [Anexos](#4)
+4.1 [Anexo I](#4.1)
 
 <div style="page-break-after: always;"></div>
 
@@ -28,11 +36,11 @@ Feito usando Node.js com Express.js, e uma base de dados em mysql
 
 # Instalação <a name="2"></a>
 
-## Requisitos:
+## Requisitos: <a name="2.1"></a>
 
 - Nodejs versão 18+
 
-## Correr a aplicação pela primeira vez:
+## Correr a aplicação pela primeira vez: <a name="2.2"></a>
 
 1. Antes de correr o programa localmente criar um ficheiro .env usando o sample.env como base.
 2. Num terminal na diretoria da aplicação correr:
@@ -52,15 +60,15 @@ npm start
 Para inicializar inicializar o a aplicação correr:
 
 ```bash
-EAI-Labs$ npm start
+npm start
 ```
 
-## Estrutura da aplicação web:
+## Estrutura da aplicação web: <a name="3.1"></a>
 A aplicação funciona maioritáriamente numa única página Composta por um titulo e 3 regiões principais distintas (enumeradas na image seguinte)
 
 ![alt text](images/fullPage.png)
 
-### 1. Selects - Selecionar dados do nosso dataset
+### 1. Selects - Selecionar dados do nosso dataset <a name="3.1.1"></a>
 
 ![alt text](images/region1.png)
 
@@ -72,7 +80,7 @@ Existem 3 alineas nesta região:
 - GET /positiveReviews/:limit -> Endpoint que retorna X reviews classificadas como positivas (Score de 4 ou 5), X sendo o valor introduzido na textbox;
 - GET /negativeReviews/:limit -> Endpoint semelante ao anterior, mas para reviews negativas (Score de 1 ou 2).
 
-### 2. Process
+### 2. Process <a name="3.1.2"></a>
 **Esta região da aplicação é desaconcelhável, como tal esta funcionalidade está desativada, uma vez que quando qualquer um destes processos é inicializado íra demorar uma quantidade de tempo considerável. Para alem de que não precisão de ser executados com regularmente.**
 
 ![alt text](images/region2.png)
@@ -84,7 +92,7 @@ Nesta região temos dois botões:
 
 Podemos ver nesta região a quantidade de entradas criadas na nossa tabela de termos, sendo cada entrada a presença de um termo num documento; podemos também ver o numero de entradas na nossa table de estatisticas dos termos onde estão os nossos melhores termos agregados.
 
-### 3. Class Identifiers
+### 3. Class Identifiers <a name="3.1.3"></a>
 Temos duas secções semelhantes nesta região, funcionam de forma identica apenas aplicam algoritmos de classificação diferentes. O nome do algoritmo respetivo encontra-se no titulo da região, sendo estes, Similaridade de Cosseno e Naive Bayes.
 
 Na "caixa" de cada secção temos dois elementos o classificador de frases e o gerador da nossa matriz de confusão.
@@ -106,12 +114,12 @@ Nesta secção inicialmente temos só um botão para gerar os nossos testes, est
 
 ![Class Identifiers section with generated confusion matrix](images/region3-matrix.png)
 
-### 4. Swagger
+### 4. Swagger <a name="3.4"></a>
 [Docs](https://swagger.io/docs/)
 
 # Anexos <a name="4"></a>
 
-## Anexo I
+## Anexo I <a name="4.1"></a>
 
 ### Matriz de confusão
 
