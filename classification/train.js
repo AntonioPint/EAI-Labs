@@ -75,7 +75,7 @@ async function processTerms() {
     //     ["breakfast", "very", "few", "choices"],
     // ];
 
-    // console.log("GENERATING TERM"); await termRepository.truncateTable()
+    console.log("GENERATING TERM"); await termRepository.truncateTable()
 
     async function insertTermData(termData){
         console.log("INSERTING TERM_DATA");
