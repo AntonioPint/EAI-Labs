@@ -4,7 +4,7 @@ Instituto Politécnico de Setúbal - ESTS
 
 Metrado Engenharia Informática - Extração Automática de Informação
 
-António Carlos Ferreira Pinto<br>
+António Carlos Ferreira Pinto - 201801432<br>
 Diogo Costa<br>
 Guilherme Malhado<br>
 
@@ -171,8 +171,8 @@ Após o processamento dos termos, o resultado do processamento dos termos deixa 
 
 |classification| name | total_occurrences|
 |--------------|------|:-----------------|
-| 0            | not  |               872|
-| 1            | good |               588|
+| 0            | not  |               880|
+| 1            | good |               571|
 
 ## Cálculo de estatisticas para cada termo <a name="3.4"></a>
 
@@ -207,31 +207,100 @@ Os classificadores utilizados servem o propósito de classificar novos textos pr
 
 O classificador TFIDF utiliza a média desta métrica (tfidf) para criar dois vetores de palavras positivas e dois de palavras negativas que serão combinados por classificação e servirão para calcular o mapa de identificação dos termos e posteriormente calcular a soma de valores. Este processo é efetuado tanto para a lista de classificação positiva como negativa, de modo a calcular a soma com maior valor. Deste modo o resultado da classificação final será a classificação com o máximo dos valores de classificação.
 
-Resultados para o tfidf:
+```javascript
+let termPositivesList = cache.termsStatistics.find(term => term.label === 1)?.bagOfWords || [];
+    let termNegativesList = cache.termsStatistics.find(term => term.label === 0)?.bagOfWords || [];
 
-O classificador Naive Bayes com TF-IDF utiliza a frequência dos termos e a métrica TF-IDF para calcular probabilidades de classificação para termos positivos e negativos. Primeiro, os tokens são extraídos e suas frequências calculadas. Depois, somas de TF-IDF são obtidas para cada classe. As probabilidades para cada termo são normalizadas e multiplicadas pelas somas de classe, ajustadas pelas probabilidades a priori. A decisão final é baseada na comparação das probabilidades acumuladas para as classes positiva e negativa, retornando a classificação com o maior valor.
+    const termPositives = new Map(termPositivesList.map(e => [e.name, { tf: e.tf, tfidf: e.tfidf, classification: e.classification }]));
+    const termNegatives = new Map(termNegativesList.map(e => [e.name, { tf: e.tf, tfidf: e.tfidf, classification: e.classification }]));
+
+    for (let i = 0; i < preProcessed.tokens.length; i++) {
+        let wordIdfPositive = cache.termsOriginalPositive.get(preProcessed.tokens[i])?.idf || 0;
+        let wordIdfNegative = cache.termsOriginalNegative.get(preProcessed.tokens[i])?.idf || 0;
+
+        preProcessed.tfidfPositive.push(
+            counting.tfidf(
+                preProcessed.tf[i] || 0,
+                wordIdfPositive
+            )
+        );
+        preProcessed.tfidfNegative.push(
+            counting.tfidf(
+                preProcessed.tf[i] || 0,
+                wordIdfNegative
+            )
+        );
+    }
+
+    let originalTfidfPositive = preProcessed.tokens.map(e => { return termPositives.get(e)?.tfidf || 0 });
+    let originalTfidfNegative = preProcessed.tokens.map(e => { return termNegatives.get(e)?.tfidf || 0 });
+
+    let similarityCossenPositive = cosineSimilarity(preProcessed.tfidfPositive, originalTfidfPositive);
+    let similarityCossenNegative = cosineSimilarity(preProcessed.tfidfNegative, originalTfidfNegative);
+
+    let decision = +(similarityCossenPositive > similarityCossenNegative);
+
+    return {
+        decision: decision,
+        similarityCossenPositiveNegative: [similarityCossenPositive, similarityCossenNegative]
+    };
+```
+
+Resultados para o tfidf:
 
 | |Predicted Positive|Predicted Negative|
 |-|-|-|
-|Actual Positive|True Positive (TP) 92 |False Negative (FN) 108|
-|Actual Negative|False Positive (FP) 88 | True Negative (TN) 112 |
+|Actual Positive|True Positive (TP) 102 |False Negative (FN) 98|
+|Actual Negative|False Positive (FP) 94 | True Negative (TN) 106 |
 
 Metricas
-Prec: 0.5111111111111111
-Rec: 0.46
-F1:0.4842105263157895
+Prec: 0.5204081632653061<br>
+Rec: 0.51<br>
+F1: 0.5151515151515151<br>
 
 ### Naive-Bayes  
 
+O classificador Naive Bayes com TF-IDF utiliza a frequência dos termos e a métrica TF-IDF para calcular probabilidades de classificação para termos positivos e negativos. Primeiro, os tokens são extraídos e suas frequências calculadas. Depois, somas de TF-IDF são obtidas para cada classe. As probabilidades para cada termo são normalizadas e multiplicadas pelas somas de classe, ajustadas pelas probabilidades a priori. A decisão final é baseada na comparação das probabilidades acumuladas para as classes positiva e negativa, retornando a classificação com o maior valor.
+
+```javascript
+// obter soma das classes 
+    const tfIdfClassSums = await termStatisticRepository.getTermStatisticTfidfSum()
+    const termsTfIdf = await termStatisticRepository.getTermStatisticTfidf(preProcessed.tokens)
+
+
+    let finalValuePositive = 1;
+    let finalValueNegative = 1;
+
+    termsTfIdf.forEach(term => {
+        if (term.positiveTfIdf != 0) {
+            finalValuePositive *= ((term.positiveTfIdf) * tfIdfClassSums.get(1))
+        }
+        if (term.negativeTfIdf != 0) {
+            finalValueNegative *= ((term.negativeTfIdf) * tfIdfClassSums.get(0))
+        }
+    });
+
+    finalValuePositive *= PositiveApriori
+    finalValueNegative *= NegativeApriori
+
+    let decision = +(finalValuePositive > finalValueNegative);
+    return {
+        decision: decision,
+        naiveBayes: [finalValuePositive, finalValueNegative]
+    };
+```
+
+Resultados para o tfidf:
+
 | |Predicted Positive|Predicted Negative|
 |-|-|-|
-|Actual Positive|True Positive (TP) 72 |False Negative (FN) 128|
-|Actual Negative|False Positive (FP) 48 | True Negative (TN) 152 |
+|Actual Positive|True Positive (TP) 153 |False Negative (FN) 47|
+|Actual Negative|False Positive (FP) 38 | True Negative (TN) 162 |
 
 Metricas
-Prec: 0.606
-Rec: 0.36036
-F1: 0.45045
+Prec: 0.8010471204188482<br>
+Rec: 0.765<br>
+F1: 0.7826086956521738<br>
 
 # Front-End <a name="4"></a>
 
@@ -354,7 +423,7 @@ Com os passos anteriores efetuados terá de correr o seguinte comando para insta
 > npm i
 ```
 
-De seguida copiar o conteúdo do ficheiro sample.env para um novo ficheiro .env que irá conter as credenciais de base de dados com autorização para efetuar operações "Select". Por isso processamento de termos não estará disponível.
+De seguida copiar o conteúdo do ficheiro sample.env para um novo ficheiro .env que irá conter as credenciais de base de dados com autorização para efetuar operações "Select". Por isso o processamento de termos não estará disponível.
 
 Agora com os passos concluidos pode ser efetuado o script para iniciar o servidor na porta 6061 acessível através do url: http://localhost:6061
 
