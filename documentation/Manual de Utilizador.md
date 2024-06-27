@@ -89,7 +89,7 @@ Temos duas secções semelhantes nesta região, funcionam de forma identica apen
 
 Na "caixa" de cada secção temos dois elementos o classificador de frases e o gerador da nossa matriz de confusão.
 
-![Cossine Similarity section in it's inicial state](images/region3-before.png)
+![Class Identifiers in it's inicial state](images/region3-before.png)
 
 #### Secção 1 - Testar Frases/Reviews originais
 
@@ -97,24 +97,14 @@ Nesta secção o utilizador pode testar uma review de comida original para ver s
 É só escrever uma frase na textbox e clickar no botão de submit ao lado.
 O resultado será a resposta se é classificado como Positivo ou Negativo e os valores ponderados (Similarity values ou Product of Probabilities) respetivos a cada Classe (por ordem Positiva e Negativa).
 
-![Cossine Similarity single phrase classification](images/region3-phrase.png)
+![Class Identifiers single phrase classification](images/region3-phrase.png)
 
 #### Secção 2 - Matriz de confusão - Testar o classificador
 
 Nesta secção inicialmente temos só um botão para gerar os nossos testes, este quando primido gera a Matriz de confusão e as Métricas Prec, Rec e F1 (Ver anexo I para explicação de o que significa cada um)
 **A primeira vez que este processo é efetuado poderá demorar alguns minutos a calcular.**
 
-![Cossine Similarity section with generated confusion matrix](images/region3-matrix.png)
-
-### 4. Class Identifier - Naive Bayes
-
-O segundo dos nossos dois algoritmos de classificação, segue o principio de utilização semelhante ao primeiro
-
-#### Before and after
-
-![Naive Bayes section before generating confusion matrix](images/region4-before.png)
-
-![Naive Bayes section with both tested phrase and generated confusion matrix](images/region4-after.png)
+![Class Identifiers section with generated confusion matrix](images/region3-matrix.png)
 
 ### 4. Swagger
 [Docs](https://swagger.io/docs/)
