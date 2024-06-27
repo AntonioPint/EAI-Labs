@@ -1,4 +1,7 @@
 {
-    "ignore": ["./classification/preprocessing_tf.json","./classification/preprocessing_tf2.json"]
+    "ignore": [
+        "./classification/preprocessing_tf.json",
+        "./classification/preprocessing_tf2.json",
+        "./documentation"
+    ]
 }
-  

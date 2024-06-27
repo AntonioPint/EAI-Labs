@@ -14,13 +14,19 @@ Guilherme Malhado<br>
 <div style="page-break-after: always;"></div>
 
 # Indice
+1. [Introdução](#1)
+2. [Instalação](#2)
+3. [Guia de Utilização](#3)
+4. [Anexos](#4)
 
-# Introdução
+<div style="page-break-after: always;"></div>
+
+# Introdução <a name="1"></a>
 
 Uma aplicação web simples, maioritáriamente de página unica. É um classificador de textos, mais em específico reviews de comida, tendo duas classes para as reviews, reviews Positivas e reviews Negativas.
 Feito usando Node.js com Express.js, e uma base de dados em mysql
 
-# Instalação
+# Instalação <a name="2"></a>
 
 ## Requesitos:
 - Nodejs versão 20.14+
@@ -37,7 +43,7 @@ EAI-Labs$ npm i
 EAI-Labs$ npm start
 ```
 
-# Guia de Utilização
+# Guia de Utilização <a name="3"></a>
 
 Para inicializar inicializar o a aplicação correr:
 ```bash
@@ -108,7 +114,7 @@ O segundo dos nossos dois algoritmos de classificação, segue o principio de ut
 
 ### 5. Swagger
 
-# Anexos
+# Anexos <a name="4"></a>
 
 ## Anexo I
 ### Matriz de confusão

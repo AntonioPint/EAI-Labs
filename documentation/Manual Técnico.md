@@ -13,15 +13,33 @@ Guilherme Malhado<br>
 
 <div style="page-break-after: always;"></div>
 
-# Motivo
+# Indice
+1. [Motivo](#1)<br>
+   1. [Ferramentas de programação](#1.1)
+2. [Dataset](#2)
+   1. [Filtragem do dataset](#2.1)
+3. [Pré-processamento](#3)
+   1. [Modelo de dados](#3.1)
+   2. [Tratamento de texto](#3.2)
+   3. [Cálculo de tf , idf e tfidf](#3.3)
+   4. [Cálculo de estatisticas para cada termo](#3.4)
+   5. [Classificadores](#3.5)
+4. [Front-End](#4)
+5. [Back-End](#5)
+5. [Base de Dados](#6)
+5. [Execução do código](#7)
+
+<div style="page-break-after: always;"></div>
+
+# Motivo <a name="1"></a>
 
 O desenvolvimento deste projeto visa criação de um modelo de previsão através de machine learning de modo a classificar textos com recurso a texto já classificados (Aprendimento supervisionado). Pretende-se classificar textos entre duas classes, classe positiva e classe negativa.
 
-## Ferramentas de programação
+## Ferramentas de programação <a name="1.1"></a>
 
 Para efetuar este trabalho foram utilizadas as linguagens Javascript para efetuar a criação tanto da parte do servidor que processa os dados como a parte que disponibiliza o front-en para retirar informações
 
-# Dataset
+# Dataset <a name="2"></a>
 
 O dataset é uma parte crucial no treino de dados para a construção de classificadores de Machine Learning. O dataset escolhido para o efeito de treino foi o foodReviews.csv. Este dataset consiste em 568 454 reviews de utilizadores. A distribuição das classificações não apresenta uniformidade entre as diferentes classificações como mostra a tabela a seguir.
 
@@ -33,7 +51,11 @@ O dataset é uma parte crucial no treino de dados para a construção de classif
 | 4             |     80 655      |                 14,1 % |
 | 5             |     363 122     |                 63,8 % |
 
+## Filtragem do dataset <a name="2.1"></a>
+
 É essencial reduzir a quantidade de casos e utilizar o mesmo número de casos da mesma classe para o treino do modelo preditivo. O dataset foi filtrado para a remoção de casos sem valor ou "null", no entanto nenhum dado foi removido dado que o dataset não continha valores null.
+
+No entanto o dataset continha no total 174 886 casos de textos duplicados, que foram removidos para melhorar a qualidade do dataset.
 
 | Id | ProductId | UserId | ProfileName | Helpfulness Numerator | Helpfulness Denominator | Score | Time | Summary | Text |
 |-----|-------------|-----------------|---------------|----------------------|------------------------|-------|------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -41,9 +63,9 @@ O dataset é uma parte crucial no treino de dados para a construção de classif
 |2 |B00813GRG4 |A1D87F6ZCVE5NK |dll pa |0 |0 |1 |1346976000 |Not as Advertised| Product arrived labeled as Jumbo Salted Peanuts...
 |3 |B000LQOCH0 |ABXLMWJIXXAIN |Natalia Corres "Natalia Corres" |1 |1 |4 |1219017600 |"Delight" says it all |This is a confection that has been around a few centuries. It is a light, ...|
 
-# Pré-processamento
+# Pré-processamento <a name="3"></a>
 
-## Modelo de dados
+## Modelo de dados <a name="3.1"></a>
 
 Para o pré-processamento foi feito o agrupamento das classes 4 e 5, que criaram uma nova classe "Positiva", e agrupados as classes 1 e 2, que criaram a classe "Negative". Estas serão as classes propostas para previsão através de um texto posteriormente. Os textos com classificação "3" foram ignorados devido á natureza muito próxima das duas classificações apresentando um meio termo.
 
@@ -51,7 +73,7 @@ Adicionalmente, o dataset continha dois campos, nomeadamente "Summary" e "Text",
 
 Com as classes finais já definidas é feito um filtro de modo a ficar com dois datasets, um para treino e um para teste. Deste modo foram considerados aleatóriamente 800 exemplos de classificação "Positiva" e 800 exemplos de classificação "Negativa" para treino. Já no dataset de teste foram considerados aleatóriamente 200 exemplos de classificação "Positiva" e 200 exemplos de classificação "Negativa". É de ressaltar que não existe a mesma ocorrencia de um caso em ambos os datasets.
 
-## Tratamento de texto
+## Tratamento de texto <a name="3.2"></a>
 
 O processamento do texto visa normalizar as palavras de modo a ter um ponto de partida para o treino do modelo com dados. As alterações ao texto original consistem nalguns passos subquentes como a remoção de letras capitalizadas, de modo a conter apenas letras descapitalizadas, remoção de simbolos para apenas conter letras de [a-z] e limpeza de espaços que não estejam entre palavras e repetição de espaços.
 
@@ -103,7 +125,7 @@ module.exports = (inputText, numbers, stopWords = []) => {
 };
 ```
 
-## Cálculo de tf , idf e tfidf
+## Cálculo de tf , idf e tfidf <a name="3.3"></a>
 
 Com os textos processados é feito o processamento dos valores de cada termo presente no conjunto de treino. Cada texto é processado, dividido em bigrama e unigrama, e calculado o valor de tf para o termo no documento.
 
@@ -152,7 +174,7 @@ Após o processamento dos termos, o resultado do processamento dos termos deixa 
 | 0            | not  |               872|
 | 1            | good |               588|
 
-## Cálculo de estatisticas para cada termo
+## Cálculo de estatisticas para cada termo <a name="3.4"></a>
 
 Nesta fase, são recolhidos os termos das classes positivas e negativas, juntamente com unigramas e bigramas. São recolhidos quatro arrays com estas informações com cada combinação possível. Exemplo, positiva-unigrama, positiva-bigrama, negativa-unigrama ...
 
@@ -177,7 +199,7 @@ async function processTermStatistics() {
 }
 ```
 
-## Classificadores
+## Classificadores <a name="3.5"></a>
 
 Os classificadores utilizados servem o propósito de classificar novos textos presentes no dataset de teste de modo a prever a classificação destes novos textos e medir a precisão dos modelos
 
@@ -211,14 +233,14 @@ Prec: 0.606
 Rec: 0.36036
 F1: 0.45045
 
-# Front-End
+# Front-End <a name="4"></a>
 
 Através do front end é possível comunicar com o back-end e fazer operações essenciais para o desenvolvimento do projeto. O front end foi feito utilizando a biblioteca ejs que facilita o processo de desenvolvimento.
 
 <div style="text-align:center"><img src="images/image.png" alt="drawing" width="700" /></div>
 
 
-# Back-End
+# Back-End <a name="5"></a>
 
 O back-end fornece rotas para pedidos de processamento como "process terms" e "process term statistics" de modo a popular as tabelas na base de dados. Este foi construido utilizando express e node usando a linguagem de programação javascript.
 
@@ -226,7 +248,7 @@ As rotas disponibilizadas pelo back-end estão demonstradas no link de swagger /
 
 ![alt text](images/image-1.png)
 
-# Base de dados
+# Base de dados <a name="6"></a>
 
 A base de dados escolhida para o projeto foi uma instância em MySql. Esta base de dados hospedada proporcionou uma pesistência nos dados para todos os desenvolvedores.
 De seguida mostra-se a constituição das tabelas utilizadas para o projeto.
@@ -321,7 +343,7 @@ CREATE TABLE `testing_set` (
  ) ENGINE=InnoDB AUTO_INCREMENT=456 DEFAULT CHARSET=latin1
 ```
 
-# Execução do código
+# Execução do código <a name="7"></a>
 
 Para se executar o código é necessário algumas ferramentas, tais como editor de texto (VSCode), Node instalado (recomendado v18.14.2 ou superior).
 

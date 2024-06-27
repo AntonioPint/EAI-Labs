@@ -42,6 +42,23 @@ commit;
 select count(*) from lojacarl_EAI_HotelReviews_Lab.food_review where score > 3;
 select count(*) from lojacarl_EAI_HotelReviews_Lab.food_review where score < 3;
 */
+-- removido duplicados
+
+SET SQL_SAFE_UPDATES = 0;
+start transaction;
+DELETE FROM food_review
+WHERE id NOT IN (
+    SELECT id
+    FROM (
+        SELECT MIN(id) AS id
+        FROM food_review
+        GROUP BY Text
+    ) AS temp_table
+);
+rollback;
+commit;
+
+SET SQL_SAFE_UPDATES = 1;
 
 drop table training_set ;
 create table training_set (
@@ -139,6 +156,7 @@ select * from (
 ) as subquery 
 order by rand() 
 limit 200;
+
 
 select * from training_set tas inner join testing_set tes on tes.review_id = tas.review_id; -- should be empty
 
